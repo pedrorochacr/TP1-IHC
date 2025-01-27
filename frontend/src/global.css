@@ -1,12 +1,12 @@
 @font-face {
-    font-family: 'Univia Pro';
-    src:  url('./assets/fonts/static/UniviaPro-Regular.otf') format('truetype');
+    font-family: 'Inria Sans';
+    src:  url('./assets/fonts/static/InriaSans-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
-    font-family: 'Univia Pro';
-    src: url('./assets/fonts/static/UniviaPro-Bold.otf') format('truetype'),;
+    font-family: 'Inria Sans';
+    src: url('./assets/fonts/static/InriaSans-Bold.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
 }

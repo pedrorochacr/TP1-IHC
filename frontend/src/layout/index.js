@@ -224,16 +224,16 @@ const LoggedInLayout = ({ children }) => {
       </main>
       <AppBar position="fixed" color="primary" className={classes.bottomAppBar}>
         <Toolbar className={classes.bottomToolbar}>
-          <IconButton  color="inherit" aria-label="open drawer">
+          <IconButton  color="inherit" aria-label="open drawer" onClick={()=>history.push("/bem-vindo")}>
             <HomeIcon />
           </IconButton>
           <IconButton color="inherit" aria-label="open drawer" onClick={()=>history.push('/locais')}>
             <LocationOnIcon />
           </IconButton>
-          <IconButton color="inherit">
+          <IconButton color="inherit" onClick={()=>history.push('/eventos')}>
             <DateRangeOutlined   />
-          </IconButton>
-          <IconButton  color="inherit">
+          </IconButton> 
+          <IconButton  color="inherit"  onClick={()=>history.push('/estatistica')}>
             <EqualizerOutlined />
           </IconButton>
           <IconButton  color="inherit">

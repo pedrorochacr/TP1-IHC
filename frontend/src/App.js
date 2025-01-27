@@ -41,7 +41,7 @@ const App = () => {
             },
             typography: {
                 fontFamily: [
-                    'Univia Pro',
+                    'Inria Sans',
                 ].join(','),
             },
             overrides: {
@@ -54,7 +54,7 @@ const App = () => {
             },
             palette: {
                 type: mode,
-                primary: { main:  "#827191" },
+                primary: { main:  "#6924a6" },
                 error: { main:"#f44336", contrastText: '#ffffff'},
                 danger:"#f44336",
                 background: "#ADAAAA",

@@ -11,6 +11,7 @@ import Registration from "../pages/cadastro";
 import Dashboard from "../pages/dashboard";
 import Locais from "../pages/locais";
 import Eventos from "../pages/eventos";
+import Estatistica from "../pages/estatistica";
 
 
 const Routes = () => {
@@ -25,6 +26,7 @@ const Routes = () => {
           <Route exact path={"/bem-vindo"} component={Dashboard}  />
           <Route exact path={"/locais"} component={Locais}  />
           <Route exact path={"/eventos"} component={Eventos}  />
+          <Route exact path={"/estatistica"} component={Estatistica}  />
           </LoggedInLayout>
         </Switch>
         <ToastContainer autoClose={3000} />
