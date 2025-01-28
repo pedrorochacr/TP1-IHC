@@ -13,7 +13,7 @@ import Locais from "../pages/locais";
 import Eventos from "../pages/eventos";
 import Estatistica from "../pages/estatistica";
 import Perfil from "../pages/perfil";
-
+import Denuncias from "../pages/denuncias";
 
 const Routes = () => {
   return (
@@ -29,6 +29,7 @@ const Routes = () => {
             <Route exact path={"/eventos"} component={Eventos} />
             <Route exact path={"/estatistica"} component={Estatistica} />
             <Route exact path={"/perfil"} component={Perfil}  />
+            <Route exact path={"/denuncias"} component={Denuncias} />
           </LoggedInLayout>
         </Switch>
         <ToastContainer autoClose={3000} />
