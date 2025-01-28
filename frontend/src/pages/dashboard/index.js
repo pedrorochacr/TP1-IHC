@@ -144,6 +144,7 @@ const Dashboard = () => {
                                         variant="contained"
                                         color="primary"
                                         className={classes.submit}
+                                        onClick={()=>history.push('/denuncias')}
                                     >
                                         Fazer Denúncia
 
