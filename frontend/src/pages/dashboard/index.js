@@ -166,6 +166,7 @@ const Dashboard = () => {
                                         fullWidth
                                         variant="contained"
                                         color="primary"
+                                        onClick={()=>history.push('/estatistica')}
                                         className={classes.submit}
                                     >
                                         Estatísticas

@@ -12,6 +12,7 @@ import Dashboard from "../pages/dashboard";
 import Locais from "../pages/locais";
 import Eventos from "../pages/eventos";
 import Estatistica from "../pages/estatistica";
+import Perfil from "../pages/perfil";
 
 
 const Routes = () => {
@@ -19,14 +20,15 @@ const Routes = () => {
     <BrowserRouter>
       <AuthProvider>
         <Switch>
-        <Route exact path={"/inicial"} component={InitialPage} />
+          <Route exact path={"/inicial"} component={InitialPage} />
           <Route exact path={"/login"} component={Login} />
-          <Route exact path={"/cadastro"} component={Registration}  />
+          <Route exact path={"/cadastro"} component={Registration} />
           <LoggedInLayout>
-          <Route exact path={"/bem-vindo"} component={Dashboard}  />
-          <Route exact path={"/locais"} component={Locais}  />
-          <Route exact path={"/eventos"} component={Eventos}  />
-          <Route exact path={"/estatistica"} component={Estatistica}  />
+            <Route exact path={"/bem-vindo"} component={Dashboard} />
+            <Route exact path={"/locais"} component={Locais} />
+            <Route exact path={"/eventos"} component={Eventos} />
+            <Route exact path={"/estatistica"} component={Estatistica} />
+            <Route exact path={"/perfil"} component={Perfil}  />
           </LoggedInLayout>
         </Switch>
         <ToastContainer autoClose={3000} />

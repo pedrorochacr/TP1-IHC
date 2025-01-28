@@ -103,18 +103,15 @@ const Locais = () => {
     const history = useHistory();
     const [user, setUser] = useState({ email: "", password: "" });
     const [showPassword, setShowPassword] = useState(false);
-    const { handleLogin, loading } = useContext(AuthContext);
+    const [loading, setLoading] = useState(false);
 
-    const handleChangeInput = e => {
-        setUser({ ...user, [e.target.name]: e.target.value });
+
+    const handleClick = () => {
+        setLoading(true); // Ativa o carregamento
+        setTimeout(() => {
+            setLoading(false); // Desativa após 2 segundos
+        }, 2000);
     };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        handleLogin(user);
-    };
-
     return (
         //<div style={{ display: 'flex', 
         //flexDirection: 'column', 
@@ -147,10 +144,10 @@ const Locais = () => {
                                                 borderRadius: '4px',
                                             }}
                                         />
-                                        <IconButton>
-                                        <SearchOutlined style={{ color: '#ffff', marginRight: '8px' }} />
+                                        <IconButton onClick={handleClick}>
+                                            <SearchOutlined style={{ color: '#ffff', marginRight: '8px' }} />
                                         </IconButton>
-                                         
+
                                     </Grid>
 
                                     {/* Campo "Tipo" */}
@@ -179,11 +176,19 @@ const Locais = () => {
                                     </Grid>
                                 </Grid>
                             </Grid>
-                            
+
                         </Grid>
-                        <Grid style={{marginTop: 20}}>
-                                <img  src={mapa} style={{width:"100%"}}/>
+                        {loading ? (
+                            <Grid container alignItems="center" justifyContent="center">
+                                <CircularProgress size={24} />
                             </Grid>
+
+                        ) : (
+                            <Grid style={{ marginTop: 20 }}>
+                                <img src={mapa} style={{ width: "100%" }} />
+                            </Grid>
+
+                        )}
                     </div>
                 </Container>
 

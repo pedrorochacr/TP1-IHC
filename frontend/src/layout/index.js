@@ -236,7 +236,7 @@ const LoggedInLayout = ({ children }) => {
           <IconButton  color="inherit"  onClick={()=>history.push('/estatistica')}>
             <EqualizerOutlined />
           </IconButton>
-          <IconButton  color="inherit">
+          <IconButton  color="inherit" onClick={()=>history.push('/perfil')}>
             <PersonIcon />
           </IconButton>
         </Toolbar>
