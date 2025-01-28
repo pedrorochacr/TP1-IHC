@@ -61,11 +61,11 @@ const reports = [
         activeStep:1
     },
     {
-      title: "Poluição sonora em horário noturno",
+      title: "Queima de lixo em área residencial",
       location: "Avenida da Paz, Bairro Boa Vista, Salvador",
       date: "12/01/2025",
       description:
-        "Barulho excessivo proveniente de uma obra que está ocorrendo durante a noite, perturbando o descanso da comunidade.",
+        "Denúncia sobre a prática de queima de lixo em um terreno baldio próximo a residências, liberando fumaça tóxica e causando desconforto aos moradores, além de impactos negativos à saúde e ao meio ambiente.",
         activeStep:2
     },
 
@@ -169,19 +169,7 @@ const Perfil = () => {
         return ['Não enviada', 'Em análise', 'Finalizada'];
       }
       
-      function getStepContent(stepIndex) {
-        switch (stepIndex) {
-          case 0:
-            return 'Não Enviada';
-          case 1:
-            return 'What is an ad group anyways?';
-          case 2:
-            return 'This is the bit I really care about!';
-          default:
-            return 'Unknown stepIndex';
-        }
-      }
-      
+
 
     return (
         <div className={classes.root}>
