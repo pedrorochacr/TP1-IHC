@@ -6,22 +6,21 @@ import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import ImageIcon from '@material-ui/icons/Image';
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: theme.spacing(3),
+  },
   form: {
     display: 'flex',
     flexDirection: 'column',
     gap: theme.spacing(2),
+    width: '100%',
+    maxWidth: '600px',
   },
   textField: {
     backgroundColor: '#f0f0f0',
-  },
-  select: {
-    backgroundColor: '#f0f0f0',
-    '& .MuiPaper-root': {
-      backgroundColor: '#f0f0f0',
-    },
-    '& .MuiSelect-select:focus': {
-      backgroundColor: '#f0f0f0',
-    },
   },
   buttons: {
     marginTop: theme.spacing(3),
@@ -38,77 +37,97 @@ const Denuncias = () => {
   const classes = useStyles();
 
   return (
-    <MainContainer>
-      <Typography variant="h5" component="h2" gutterBottom>
-        Nova denúncia
-      </Typography>
-      <form className={classes.form}>
-        <TextField
-          label="Título"
-          variant="outlined"
-          placeholder="Opcional"
-          className={classes.textField}
-        />
-        <TextField
-          label="Provável autor"
-          variant="outlined"
-          placeholder="Opcional"
-          className={classes.textField}
-        />
-        <Select
-          variant="outlined"
-          displayEmpty
-          className={classes.select}
-        >
-          <MenuItem value="" disabled>
-            Categoria
-          </MenuItem>
-          <MenuItem value="categoria1">Categoria 1</MenuItem>
-          <MenuItem value="categoria2">Categoria 2</MenuItem>
-          <MenuItem value="categoria3">Categoria 3</MenuItem>
-        </Select>
-        <TextField
-          label="Descrição"
-          variant="outlined"
-          multiline
-          rows={4}
-          className={classes.textField}
-        />
-        <Select
-          variant="outlined"
-          displayEmpty
-          className={classes.select}
-        >
-          <MenuItem value="" disabled>
-            Status do lixo
-          </MenuItem>
-          <MenuItem value="status1">Status 1</MenuItem>
-          <MenuItem value="status2">Status 2</MenuItem>
-          <MenuItem value="status3">Status 3</MenuItem>
-        </Select>
-        <TextField
-          label="Referência"
-          variant="outlined"
-          placeholder="Opcional"
-          className={classes.textField}
-        />
-        <div className={classes.mediaButtons}>
-          <IconButton color="primary" aria-label="upload picture" component="span">
-            <PhotoCamera />
-          </IconButton>
-          <IconButton color="primary" aria-label="upload image" component="span">
-            <ImageIcon />
-          </IconButton>
+    <MainContainer style={{display: 'flex', justifyContent: 'center'}}>
+        <div className={classes.container}>
+            <Typography variant="h5" component="h2" gutterBottom>
+                Nova denúncia
+            </Typography>
+            <form className={classes.form}>
+                <TextField
+                label="Título"
+                variant="outlined"
+                placeholder="Opcional"
+                className={classes.textField}
+                />
+                <TextField
+                label="Provável autor"
+                variant="outlined"
+                placeholder="Opcional"
+                className={classes.textField}
+                />
+                <Grid item style={{ display: 'flex', alignItems: 'center' }}>
+                <select
+                    style={{
+                        flex: 1,
+                        padding: '8px',
+                        fontSize: '14px',
+                        border: '1px solid #ccc',
+                        borderRadius: '4px',
+                        backgroundColor: '#fff',
+                    }}
+                >
+                    <option value="" disabled selected>
+                    Categoria
+                    </option>
+                    <option value="opcao1">Resíduos tóxicos </option>
+                    <option value="opcao2">Recicláveis </option>
+                    <option value="opcao3">Eletronicos</option>
+                    <option value="opcao4">Sanitário</option>
+                    <option value="opcao5">Resíduos de Animais</option>
+                    <option value="opcao6">Lixo Espalhado</option>
+                    <option value="opcao7">Outro</option>
+                </select>
+                </Grid>
+                <TextField
+                label="Descrição"
+                variant="outlined"
+                multiline
+                rows={4}
+                className={classes.textField}
+                />
+                <Grid item style={{ display: 'flex', alignItems: 'center' }}>
+                <select
+                    style={{
+                        flex: 1,
+                        padding: '8px',
+                        fontSize: '14px',
+                        border: '1px solid #ccc',
+                        borderRadius: '4px',
+                        backgroundColor: '#fff',
+                    }}
+                >
+                    <option value="" disabled selected>
+                    Status do Lixo
+                    </option>
+                    <option value="opcao1">Espalhado </option>
+                    <option value="opcao2">Amontoado </option>
+                    <option value="opcao3">Em decomposicao</option>
+                </select>
+                </Grid>
+                <TextField
+                label="Referência"
+                variant="outlined"
+                placeholder="Opcional"
+                className={classes.textField}
+                />
+                <div className={classes.mediaButtons}>
+                <IconButton color="primary" aria-label="upload picture" component="span">
+                    <PhotoCamera />
+                </IconButton>
+                <IconButton color="primary" aria-label="upload image" component="span">
+                    <ImageIcon />
+                </IconButton>
+                </div>
+                <div className={classes.buttons}>
+                <Button variant="outlined">
+                    Cancelar
+                </Button>
+                <Button variant="contained" color="primary">
+                    Confirmar edição
+                </Button>
+                </div>
+            </form>
         </div>
-        <div className={classes.buttons}>
-          <Button variant="outlined">
-            Cancelar
-          </Button>
-          <Button variant="contained" color="primary">
-            Confirmar edição
-          </Button>
-        </div>
-      </form>
     </MainContainer>
   );
 };
