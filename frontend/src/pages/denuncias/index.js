@@ -39,7 +39,7 @@ const Denuncias = () => {
   return (
     <MainContainer style={{display: 'flex', justifyContent: 'center'}}>
         <div className={classes.container}>
-            <Typography variant="h5" component="h2" gutterBottom>
+            <Typography variant="h4" color="primary" style={{ textAlign: "center", fontWeight: 700, marginTop: '24px', marginBottom: '24px' }}>
                 Nova denúncia
             </Typography>
             <form className={classes.form}>
