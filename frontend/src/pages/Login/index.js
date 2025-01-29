@@ -1,30 +1,20 @@
-import React, { useState, useContext } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import React, { useState } from "react";
 import {
   Button,
-  CssBaseline,
   TextField,
-  Grid,
   Typography,
-  Container,
-  InputAdornment,
-  IconButton,
-  Link,
-  CircularProgress
+  Snackbar,
 } from "@material-ui/core";
-
 import { makeStyles } from "@material-ui/core/styles";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min.js";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
-import { AuthContext } from "../../context/Auth/AuthContext.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    height: "100vh", // Centraliza verticalmente
+    height: "100vh",
     backgroundColor: theme.palette.background.default,
   },
   container: {
@@ -62,21 +52,35 @@ const useStyles = makeStyles((theme) => ({
 const Login = () => {
   const classes = useStyles();
   const history = useHistory();
-  const [user, setUser] = useState({ email: "", password: "" });
-  const { handleLogin, loading } = useContext(AuthContext);
-
-  const handleChangeInput = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleLogin(user);
+
+    // Exibe o Snackbar
+    setSnackbarOpen(true);
+
+    // Aguarda 2 segundos e redireciona
+    setTimeout(() => {
+      setSnackbarOpen(false); // Fecha o Snackbar
+      history.push("/bem-vindo"); // Redireciona para a página "Bem-Vindo"
+    }, 2000);
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
   };
 
   return (
     <div className={classes.root}>
       <div className={classes.container}>
+        <div
+          style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
+          onClick={() => history.push("/")}
+        >
+          <ArrowBackIosIcon fontSize="small" />
+          <Typography variant="body2">Voltar</Typography>
+        </div>
         <Typography variant="h5" align="center" gutterBottom>
           Login
         </Typography>
@@ -85,35 +89,53 @@ const Login = () => {
             variant="outlined"
             label="Usuário"
             name="email"
-            onChange={handleChangeInput}
             className={classes.field}
-            required
+            placeholder="Opcional"
           />
           <TextField
             variant="outlined"
             label="Senha"
             type="password"
             name="password"
-            onChange={handleChangeInput}
             className={classes.field}
-            required
+            placeholder="Opcional"
           />
           <div className={classes.forgotPassword}>
-            <Link onClick={() => history.push("/esqueci-minha-senha")}>
+            <Typography
+              style={{ cursor: "pointer" }}
+              onClick={() => history.push("/esqueci-minha-senha")}
+            >
               Esqueci minha senha
-            </Link>
+            </Typography>
           </div>
           <Button
             type="submit"
             variant="contained"
             color="primary"
             className={classes.submit}
-            disabled={loading}
           >
-            {loading ? <CircularProgress size={24} /> : "Entrar"}
+            Entrar
           </Button>
         </form>
       </div>
+      <Snackbar
+  open={snackbarOpen}
+  autoHideDuration={2000}
+  onClose={handleSnackbarClose}
+  anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+>
+  <div
+    style={{
+      padding: "16px",
+      background: "#4caf50",
+      color: "#fff",
+      borderRadius: "8px",
+      fontWeight: "bold",
+    }}
+  >
+    Login realizado com sucesso!
+  </div>
+</Snackbar>
     </div>
   );
 };
