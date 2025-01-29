@@ -13,10 +13,13 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Snackbar,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import ImageIcon from "@material-ui/icons/Image";
+import Alert from "@material-ui/lab/Alert";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -41,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "8px",
   },
   button: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(2), // Ajustado para ficar mais próximo
     padding: theme.spacing(1.5),
     fontWeight: "bold",
     borderRadius: "8px",
@@ -89,9 +92,14 @@ const useStyles = makeStyles((theme) => ({
 
 const Denuncias = () => {
   const classes = useStyles();
+  const history = useHistory();
   const [confirmDialog, setConfirmDialog] = useState(false);
   const [categoria, setCategoria] = useState("");
   const [statusLixo, setStatusLixo] = useState("");
+  const [notification, setNotification] = useState({
+    open: false,
+    message: "",
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -100,11 +108,23 @@ const Denuncias = () => {
 
   const handleConfirm = () => {
     setConfirmDialog(false);
-    alert("Denúncia enviada com sucesso!");
+    setNotification({
+      open: true,
+      message: "Denúncia enviada com sucesso! Redirecionando...",
+    });
+    
+    setTimeout(() => {
+      history.push("/bem-vindo");
+    }, 2000);
   };
 
   const handleCancel = () => {
     setConfirmDialog(false);
+  };
+
+  const handleCloseNotification = (event, reason) => {
+    if (reason === "clickaway") return;
+    setNotification({ ...notification, open: false });
   };
 
   const menuProps = {
@@ -143,6 +163,7 @@ const Denuncias = () => {
       >
         Nova Denúncia
       </Typography>
+
       <form className={classes.form} onSubmit={handleSubmit}>
         <TextField
           label="Título"
@@ -150,6 +171,7 @@ const Denuncias = () => {
           placeholder="Ex.: Lixo acumulado na praça"
           className={classes.textField}
         />
+
         <TextField
           label="Provável Autor"
           variant="outlined"
@@ -247,6 +269,22 @@ const Denuncias = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={6000}
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          elevation={6}
+          variant="filled"
+          onClose={handleCloseNotification}
+          severity="success"
+        >
+          {notification.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
