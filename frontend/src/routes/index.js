@@ -24,6 +24,7 @@ const Routes = () => {
           <Route exact path={"/inicial"} component={InitialPage} />
           <Route exact path={"/login"} component={Login} />
           <Route exact path={"/cadastro"} component={Registration} />
+          <Route exact path={"/esqueci-minha-senha"} component={ForgotPassword} />
           <LoggedInLayout>
             <Route exact path={"/bem-vindo"} component={Dashboard} />
             <Route exact path={"/locais"} component={Locais} />
@@ -31,7 +32,6 @@ const Routes = () => {
             <Route exact path={"/estatistica"} component={Estatistica} />
             <Route exact path={"/perfil"} component={Perfil}  />
             <Route exact path={"/denuncias"} component={Denuncias} />
-            <Route exact path={"/esqueci-minha-senha"} component={ForgotPassword} />
           </LoggedInLayout>
         </Switch>
         <ToastContainer autoClose={3000} />
