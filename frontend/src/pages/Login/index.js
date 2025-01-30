@@ -8,6 +8,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min.js";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 400,
     padding: theme.spacing(3),
     borderRadius: theme.spacing(2),
-    backgroundColor: "#fff", // Altere para branco
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", // Sombra para contraste
+    backgroundColor: "#fff",
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
   },
   field: {
     width: "100%",
@@ -56,14 +57,11 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Exibe o Snackbar
     setSnackbarOpen(true);
 
-    // Aguarda 2 segundos e redireciona
     setTimeout(() => {
-      setSnackbarOpen(false); // Fecha o Snackbar
-      history.push("/bem-vindo"); // Redireciona para a página "Bem-Vindo"
+      setSnackbarOpen(false);
+      history.push("/bem-vindo");
     }, 2000);
   };
 
@@ -118,24 +116,23 @@ const Login = () => {
           </Button>
         </form>
       </div>
+
       <Snackbar
-  open={snackbarOpen}
-  autoHideDuration={2000}
-  onClose={handleSnackbarClose}
-  anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
->
-  <div
-    style={{
-      padding: "16px",
-      background: "#4caf50",
-      color: "#fff",
-      borderRadius: "8px",
-      fontWeight: "bold",
-    }}
-  >
-    Login realizado com sucesso!
-  </div>
-</Snackbar>
+        open={snackbarOpen}
+        autoHideDuration={2000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          elevation={6}
+          variant="filled"
+          onClose={handleSnackbarClose}
+          severity="success"
+          style={{ width: '100%' }}
+        >
+          Login realizado com sucesso!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
