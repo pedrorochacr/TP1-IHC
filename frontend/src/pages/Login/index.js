@@ -22,8 +22,8 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 400,
     padding: theme.spacing(3),
     borderRadius: theme.spacing(2),
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+    backgroundColor: "#fff", // Altere para branco
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", // Sombra para contraste
   },
   field: {
     width: "100%",

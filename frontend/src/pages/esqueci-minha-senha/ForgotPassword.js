@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    height: "100vh", // Centraliza verticalmente
+    height: "100vh",
     backgroundColor: theme.palette.background.default,
   },
   container: {
@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 400,
     padding: theme.spacing(3),
     borderRadius: theme.spacing(2),
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+    backgroundColor: "#fff", // Fundo branco
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", // Contraste adicional
   },
   field: {
     width: "100%",
