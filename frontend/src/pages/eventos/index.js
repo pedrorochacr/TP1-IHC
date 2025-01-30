@@ -1,285 +1,275 @@
-import React, { useState, useContext } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import React, { useState } from "react";
 import {
-    Button,
-    CssBaseline,
-    TextField,
-    Grid,
-    Typography,
-    Container,
-    InputAdornment,
-    IconButton,
-    Link,
-    CircularProgress,
-    Card,
-    CardMedia,
-    CardContent
-} from '@material-ui/core';
-
-import StarIcon from '@material-ui/icons/Star';
+  Typography,
+  TextField,
+  Button,
+  IconButton,
+  CircularProgress,
+  Card,
+  CardMedia,
+  CardContent,
+  Grid,
+  Container,
+  Snackbar,
+} from "@material-ui/core";
+import {
+  PlaceOutlined,
+  DateRangeOutlined,
+  SearchOutlined,
+  ShareOutlined,
+  StarOutlined,
+  Star,
+  TimeToLeaveOutlined,
+} from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
-import { DateRangeOutlined, PlaceOutlined, SearchOutlined, ShareOutlined, StarTwoTone, TimeToLeaveOutlined, Visibility, VisibilityOff } from "@material-ui/icons";
-import useAuth from "../../hooks/useAuth.js";
-import { i18n } from "../../translate/i18n";
-import logoTarget from "../../assets/logoLogin.png";
-import { AuthContext } from "../../context/Auth/AuthContext.js";
-import mapa from "../../assets/mapa.png"
-import evento1 from "../../assets/evento1.png"
-import evento2 from "../../assets/evento2.png"
-import evento3 from "../../assets/evento3.png"
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min.js";
-
-const data = [
-    {
-        title: "Limpeza do Mar",
-        image: evento1,
-        ong: "Projeto Mar Sem Lixo",
-        local: "Praia do Porto da Barra, Salvador",
-        date: "05/02/2025",
-        time: "09:00 - 11:00",
-    },
-    {
-        title: "Limpeza da Lagoa",
-        image: evento2,
-        ong: "Beagá Limpa",
-        local: "Lagoa da Pampulha, Belo Horizonte",
-        date: "01/02/2025",
-        time: "07:00 - 8:00",
-    },
-    {
-        title: "Limpeza do Mar",
-        image: evento3,
-        ong: "Bodyboarder do Olho D'Água",
-        local: "Lagoa da Pampulha, São Luís",
-        date: "07/02/2025",
-        time: "07:00 - 8:00",
-    },
-];
+import Alert from "@material-ui/lab/Alert";
+import evento1 from "../../assets/evento1.png";
+import evento2 from "../../assets/evento2.png";
+import evento3 from "../../assets/evento3.png";
 
 const useStyles = makeStyles((theme) => ({
-
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
+  root: {
+    backgroundColor: theme.palette.background.default,
+    minHeight: "100vh",
+    padding: theme.spacing(4, 0),
+  },
+  header: {
+    textAlign: "center",
+    marginBottom: theme.spacing(4),
+    marginTop: theme.spacing(6),
+  },
+  filterContainer: {
+    marginBottom: theme.spacing(4),
+    display: "flex",
+    justifyContent: "center",
+    gap: theme.spacing(2),
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
+      alignItems: "center",
     },
-    whatsapp: {
-        backgroundColor: '#32d951'
-    },
-    field: {
-        background: theme.palette.fieldBackground,
-        borderRadius: 109,
-        height: 30,
-        border: 'none'
-
-    },
-    form: {
-        width: "100%", // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-    },
-    paper: {
-        marginTop: theme.spacing(8),
-        display: "flex",
-        flexDirection: "column",
-
-        padding: theme.spacing(2),
-        borderRadius: theme.spacing(2),
-        borderColor: "#ffffff",
-
-        //backgroundColor: `rgba(${theme.palette.background.paper}, 0.8)`,
-
-
-    },
-    submit: {
-        background: "#D9D9D9",
-        color: "#000000",
-        fontWeight: 700,
-        padding: 10,
-        margin: theme.spacing(1, 0, 2),
-    },
-    containerWrapper: {
-        display: "flex",
-
-        justifyContent: "space-between",
-        gap: theme.spacing(4),
-    },
-    container: {
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-    },
-    root: {
-        background: theme.palette.background,
-    },
-    mobileContainer: {
-        flex: 1,
-
-
-    },
-    hideOnMobile: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        [theme.breakpoints.down('sm')]: {
-            display: 'none',
-        },
-    },
+  },
+  filterInput: {
+    width: "250px",
+    backgroundColor: "#fff",
+    borderRadius: "8px",
+  },
+  card: {
+    display: "flex",
+    flexDirection: "column",
+    borderRadius: "12px",
+    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+    backgroundColor: "#fff",
+    marginBottom: theme.spacing(2),
+  },
+  cardMedia: {
+    height: "150px",
+    borderTopLeftRadius: "12px",
+    borderTopRightRadius: "12px",
+    objectFit: "cover",
+  },
+  cardContent: {
+    flex: 1,
+    padding: theme.spacing(2),
+    position: "relative",
+  },
+  actionIcons: {
+    display: "flex",
+    gap: theme.spacing(1),
+    marginTop: theme.spacing(1),
+  },
+  loadingContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: "200px",
+  },
 }));
 
-
-
+const data = [
+  {
+    title: "Limpeza do Mar",
+    image: evento1,
+    ong: "Projeto Mar Sem Lixo",
+    local: "Praia do Porto da Barra, Salvador",
+    date: "05/02/2025",
+    time: "09:00 - 11:00",
+  },
+  {
+    title: "Limpeza da Lagoa",
+    image: evento2,
+    ong: "Beagá Limpa",
+    local: "Lagoa da Pampulha, Belo Horizonte",
+    date: "01/02/2025",
+    time: "07:00 - 8:00",
+  },
+  {
+    title: "Limpeza do Mar",
+    image: evento3,
+    ong: "Bodyboarder do Olho D'Água",
+    local: "Lagoa da Pampulha, São Luís",
+    date: "07/02/2025",
+    time: "07:00 - 8:00",
+  },
+];
 
 const Eventos = () => {
-    const classes = useStyles();
-    const history = useHistory();
+  const classes = useStyles();
+  const [value, setValue] = useState("");
+  const [favorites, setFavorites] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [notification, setNotification] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
-    const [value, setValue] = useState('');
-    const [favorites, setFavorites] = useState({});
-    const [loading, setLoading] = useState(false);
   const toggleFavorite = (index) => {
     setFavorites((prev) => ({
       ...prev,
-      [index]: !prev[index], // Alterna entre true e false
+      [index]: !prev[index],
     }));
   };
-  const handleClick = () => {
-    setLoading(true); // Ativa o carregamento
+
+  const handleDateInput = (e) => {
+    let input = e.target.value.replace(/\D/g, "");
+    if (input.length > 8) input = input.slice(0, 8);
+
+    const day = input.slice(0, 2);
+    const month = input.slice(2, 4);
+    const year = input.slice(4, 8);
+
+    let formattedDate = day;
+    if (month) formattedDate += "/" + month;
+    if (year) formattedDate += "/" + year;
+
+    setValue(formattedDate);
+  };
+
+  const handleSearch = () => {
+    setLoading(true);
+
     setTimeout(() => {
-      setLoading(false); // Desativa após 2 segundos
+      setLoading(false);
+      setNotification({
+        open: true,
+        message: "Eventos atualizados com sucesso!",
+        severity: "success",
+      });
     }, 2000);
   };
 
-    const handleDateInput = (e) => {
-        let input = e.target.value.replace(/\D/g, ''); // Remove qualquer caractere não numérico
-        if (input.length > 8) input = input.slice(0, 8); // Limita a 8 caracteres (ddmmyyyy)
+  const handleCloseNotification = (event, reason) => {
+    if (reason === "clickaway") return;
+    setNotification({ ...notification, open: false });
+  };
 
-        // Aplica a máscara
-        const day = input.slice(0, 2);
-        const month = input.slice(2, 4);
-        const year = input.slice(4, 8);
+  return (
+    <div className={classes.root}>
+      <Container maxWidth="md">
+        <Typography variant="h4" color="primary" className={classes.header}>
+          Eventos
+        </Typography>
 
-        let formattedDate = day;
-        if (month) formattedDate += '/' + month;
-        if (year) formattedDate += '/' + year;
-
-        setValue(formattedDate);
-    };
-    return (
-        <div className={classes.root}>
-            <Container component="main" maxWidth="md">
-                <CssBaseline />
-
-                <Container component="div" maxWidth="xs" className={classes.mobileContainer}>
-                    <div className={classes.paper}>
-                        <Grid container direction="column" justifyContent="center">
-                            <Typography variant="h4" color="primary" style={{ textAlign: "center", fontWeight: 700 }}>Eventos</Typography>
-                            <Grid container direction="column" style={{ marginTop: 40 }}>
-                                <Grid container direction="column"  style={{ width: '100%', maxWidth: '400px', margin: '0 auto' }}>
-                                    {/* Campo "Local" */}
-                                    <Grid item style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
-                                        <Typography style={{ marginRight: '10px', width: '50px', fontWeight: 600 }}>Cidade</Typography>
-                                        <input
-                                            type="text"
-                                            style={{
-                                                flex: 1,
-                                                padding: '8px',
-                                                fontSize: '14px',
-                                                border: '1px solid #ccc',
-                                                borderRadius: '4px',
-                                            }}
-                                        />
-                                        <IconButton onClick={handleClick}>
-                                            <SearchOutlined style={{ color: '#ffff', marginRight: '8px' }} />
-                                        </IconButton>
-
-                                    </Grid>
-
-                                    {/* Campo "Tipo" */}
-                                    <Grid item style={{ display: 'flex', alignItems: 'center' }}>
-                                        <Typography style={{ marginRight: '10px', width: '50px', fontWeight: 600 }}>Data</Typography>
-                                        <input
-                                            type="text"
-                                            value={value}
-                                            onChange={handleDateInput}
-
-                                            style={{
-                                                flex: 1,
-                                                padding: '8px',
-                                                fontSize: '14px',
-                                                border: '1px solid #ccc',
-                                                borderRadius: '4px',
-                                            }}
-                                        />
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-
-                        </Grid>
-                       
-                        <Grid style={{ marginTop: 20 }} container direction="column" alignItems="center">
-                        {loading ? (
-                                <CircularProgress size={24}  />
-                            ) : (
-                                data.map((event, index) => (
-                                    <Grid item xs={12} key={index}>
-                                        <Card style={{ display: "flex", borderRadius: "12px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", border: "1px solid #ccc", marginBottom:7  }}>
-                                            {/* Imagem */}
-                                            <CardMedia
-                                                component="img"
-                                                style={{ width: "150px", objectFit: "cover", borderRadius: "12px 0 0 12px" }}
-                                                image={event.image}
-                                                alt={event.title}
-                                            />
-                                            {/* Conteúdo */}
-                                            <CardContent style={{ flex: "1", padding: "16px", position: "relative" }}>
-                                                <Typography variant="h6" style={{ fontWeight: "bold", marginBottom: "8px", fontSize:15 }}>
-                                                    {event.title}
-                                                </Typography>
-                                             
-                                              
-                                            
-                                                <Typography variant="body2" style={{ marginBottom: "4px" }}>
-                                                    <strong>ONG:</strong> {event.ong}
-                                                    
-                                                </Typography>
-                                                <Typography variant="body2" style={{ marginBottom: "4px" }}>
-                                                    <strong>Local:</strong> {event.local}
-                                                    <PlaceOutlined color="primary"/>
-                                                </Typography>
-                                                <Typography variant="body2" style={{ marginBottom: "4px" }}>
-                                                    <strong>Data:</strong> {event.date}
-                                                    <DateRangeOutlined  color="primary"/>
-                                                </Typography>
-                                                <Typography variant="body2">
-                                                    <strong>Horário:</strong> {event.time}
-                                                    <TimeToLeaveOutlined color="primary"/>
-                                                </Typography>
-                                                {/* Ícones */}
-                                                <div style={{  display: "flex" }}>
-                                                    <IconButton size="small" onClick={() => toggleFavorite(index)}>
-                                                    {favorites[index] ? (
-                        <StarIcon style={{ color: "gold" }} /> // Estrela preenchida
-                      ) : (
-                        <StarTwoTone style={{ color: "gold" }} /> // Estrela vazia
-                      )}
-                                                    </IconButton>
-                                                    <IconButton size="small">
-                                                        <ShareOutlined />
-                                                    </IconButton>
-                                                </div>
-                                            </CardContent>
-                                        </Card>
-                                    </Grid>
-                                ))
-                            )}
-                            
-                        </Grid>
-                    </div>
-                </Container>
-
-            </Container>
+        <div className={classes.filterContainer}>
+          <TextField
+            label="Cidade"
+            variant="outlined"
+            placeholder="Digite a cidade"
+            className={classes.filterInput}
+          />
+          <TextField
+            label="Data"
+            variant="outlined"
+            placeholder="DD/MM/AAAA"
+            value={value}
+            onChange={handleDateInput}
+            className={classes.filterInput}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<SearchOutlined />}
+            onClick={handleSearch}
+          >
+            Buscar
+          </Button>
         </div>
-    );
+
+        {loading ? (
+          <div className={classes.loadingContainer}>
+            <CircularProgress size={32} />
+          </div>
+        ) : (
+          <Grid container spacing={3}>
+            {data.map((event, index) => (
+              <Grid item xs={12} key={index}>
+                <Card className={classes.card}>
+                  <CardMedia
+                    component="img"
+                    className={classes.cardMedia}
+                    image={event.image}
+                    alt={event.title}
+                  />
+                  <CardContent className={classes.cardContent}>
+                    <Typography variant="h6" gutterBottom>
+                      {event.title}
+                    </Typography>
+                    <Typography variant="body2">
+                      <strong>ONG:</strong> {event.ong}
+                    </Typography>
+                    <Typography variant="body2">
+                      <strong>Local:</strong> {event.local}{" "}
+                      <PlaceOutlined color="primary" />
+                    </Typography>
+                    <Typography variant="body2">
+                      <strong>Data:</strong> {event.date}{" "}
+                      <DateRangeOutlined color="primary" />
+                    </Typography>
+                    <Typography variant="body2">
+                      <strong>Horário:</strong> {event.time}{" "}
+                      <TimeToLeaveOutlined color="primary" />
+                    </Typography>
+                    <div className={classes.actionIcons}>
+                      <IconButton
+                        size="small"
+                        onClick={() => toggleFavorite(index)}
+                        aria-label="Favoritar"
+                      >
+                        {favorites[index] ? (
+                          <Star style={{ color: "gold" }} />
+                        ) : (
+                          <StarOutlined style={{ color: "gray" }} />
+                        )}
+                      </IconButton>
+                      <IconButton size="small" aria-label="Compartilhar">
+                        <ShareOutlined color="primary" />
+                      </IconButton>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        )}
+
+        <Snackbar
+          open={notification.open}
+          autoHideDuration={6000}
+          onClose={handleCloseNotification}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert
+            elevation={6}
+            variant="filled"
+            onClose={handleCloseNotification}
+            severity={notification.severity}
+          >
+            {notification.message}
+          </Alert>
+        </Snackbar>
+      </Container>
+    </div>
+  );
 };
 
-export default Eventos; 
+export default Eventos;
