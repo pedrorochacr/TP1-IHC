@@ -1,335 +1,372 @@
-import React, { useState, useContext } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import React, { useState } from "react";
 import {
-    Button,
-    CssBaseline,
-    TextField,
-    Grid,
-    Typography,
-    Container,
-    InputAdornment,
-    IconButton,
-    Link,
-    CircularProgress,
-    Card,
-    CardMedia,
-    CardContent,
-    Stepper,
-    Step,
-    StepLabel
-} from '@material-ui/core';
-
-import StarIcon from '@material-ui/icons/Star';
+  Typography,
+  Grid,
+  Container,
+  CssBaseline,
+  Card,
+  CardMedia,
+  CardContent,
+  IconButton,
+  Stepper,
+  Step,
+  StepLabel,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Backdrop,
+  Snackbar,
+} from "@material-ui/core";
+import {
+  PlaceOutlined,
+  DateRangeOutlined,
+  ShareOutlined,
+  Star,
+  ExitToApp,
+  Delete,
+} from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
-import { DateRangeOutlined, PlaceOutlined, SearchOutlined, ShareOutlined, StarTwoTone, TimeToLeaveOutlined, Visibility, VisibilityOff } from "@material-ui/icons";
-import useAuth from "../../hooks/useAuth.js";
-import { i18n } from "../../translate/i18n";
-import logoTarget from "../../assets/logoLogin.png";
-import { AuthContext } from "../../context/Auth/AuthContext.js";
-import mapa from "../../assets/mapa.png"
-import evento1 from "../../assets/evento1.png"
-import evento2 from "../../assets/evento2.png"
-import evento3 from "../../assets/evento3.png"
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min.js";
+import Alert from "@material-ui/lab/Alert";
+import evento1 from "../../assets/evento1.png";
+import evento2 from "../../assets/evento2.png";
 
-const data = [
+const useStyles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: theme.palette.background.default,
+    minHeight: "100vh",
+    padding: theme.spacing(4),
+  },
+  paper: {
+    padding: theme.spacing(3),
+    borderRadius: "12px",
+    backgroundColor: "#fff",
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+  },
+  header: {
+    textAlign: "center",
+    fontWeight: 700,
+    marginBottom: theme.spacing(3),
+  },
+  button: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    padding: theme.spacing(1),
+    fontWeight: "bold",
+    borderRadius: "8px",
+  },
+  card: {
+    display: "flex",
+    borderRadius: "12px",
+    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+    marginBottom: theme.spacing(2),
+  },
+  cardMedia: {
+    width: 150,
+    borderRadius: "12px 0 0 12px",
+  },
+  cardContent: {
+    padding: theme.spacing(2),
+    flex: 1,
+  },
+  stepper: {
+    padding: 0,
+    marginTop: theme.spacing(2),
+  },
+  dialogPaper: {
+    backgroundColor: "#fff",
+    borderRadius: "8px",
+    padding: theme.spacing(2),
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
+  },
+  backdrop: {
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+  },
+}));
+
+const Perfil = () => {
+  const classes = useStyles();
+  const [visibleEvents, setVisibleEvents] = useState(1);
+  const [visibleReports, setVisibleReports] = useState(1);
+  const [logoutDialog, setLogoutDialog] = useState(false);
+  const [deleteDialog, setDeleteDialog] = useState(false);
+  const [cpf, setCpf] = useState("");
+  const [notification, setNotification] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+
+  const events = [
     {
-        title: "Limpeza do Mar",
-        image: evento1,
-        ong: "Projeto Mar Sem Lixo",
-        local: "Praia do Porto da Barra, Salvador",
-        date: "05/02/2025",
-        time: "09:00 - 11:00",
+      title: "Limpeza do Mar",
+      image: evento1,
+      ong: "Projeto Mar Sem Lixo",
+      local: "Praia do Porto da Barra, Salvador",
+      date: "05/02/2025",
+      time: "09:00 - 11:00",
     },
     {
-        title: "Limpeza da Lagoa",
-        image: evento2,
-        ong: "Beagá Limpa",
-        local: "Lagoa da Pampulha, Belo Horizonte",
-        date: "01/02/2025",
-        time: "07:00 - 8:00",
+      title: "Limpeza da Lagoa",
+      image: evento2,
+      ong: "Beagá Limpa",
+      local: "Lagoa da Pampulha, Belo Horizonte",
+      date: "01/02/2025",
+      time: "07:00 - 08:00",
     },
+  ];
 
-];
-const reports = [
+  const reports = [
     {
       title: "Descarte irregular de lixo",
-      location: "Rua das Flores, Centro, Salvador",
-      date: "10/01/2025",
       description:
         "Denúncia sobre o descarte irregular de lixo na rua, com acumulação de resíduos que prejudica a saúde pública.",
-        activeStep:1
+      location: "Rua das Flores, Centro, Salvador",
+      date: "10/01/2025",
+      activeStep: 1,
     },
     {
       title: "Queima de lixo em área residencial",
+      description:
+        "Denúncia sobre a prática de queima de lixo em um terreno baldio próximo a residências, liberando fumaça tóxica e causando desconforto aos moradores.",
       location: "Avenida da Paz, Bairro Boa Vista, Salvador",
       date: "12/01/2025",
-      description:
-        "Denúncia sobre a prática de queima de lixo em um terreno baldio próximo a residências, liberando fumaça tóxica e causando desconforto aos moradores, além de impactos negativos à saúde e ao meio ambiente.",
-        activeStep:2
+      activeStep: 2,
     },
-
-    // Adicione mais denúncias conforme necessário
   ];
-const useStyles = makeStyles((theme) => ({
 
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
-    whatsapp: {
-        backgroundColor: '#32d951'
-    },
-    field: {
-        background: theme.palette.fieldBackground,
-        borderRadius: 109,
-        height: 30,
-        border: 'none'
+  const toggleEventsVisibility = () => {
+    setVisibleEvents((prev) => (prev === 1 ? events.length : 1));
+  };
 
-    },
-    form: {
-        width: "100%", // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-    },
-    paper: {
-        marginTop: theme.spacing(8),
-        display: "flex",
-        flexDirection: "column",
+  const toggleReportsVisibility = () => {
+    setVisibleReports((prev) => (prev === 1 ? reports.length : 1));
+  };
 
-        padding: theme.spacing(2),
-        borderRadius: theme.spacing(2),
-        borderColor: "#ffffff",
+  const handleLogout = () => {
+    setLogoutDialog(false);
+    setNotification({
+      open: true,
+      message: "Logout realizado com sucesso!",
+      severity: "success",
+    });
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, 2000);
+  };
 
-        //backgroundColor: `rgba(${theme.palette.background.paper}, 0.8)`,
+  const handleDeleteAccount = () => {
+    if (!cpf.trim()) {
+      setNotification({
+        open: true,
+        message: "Por favor, digite um CPF válido!",
+        severity: "error",
+      });
+      return;
+    }
+    
+    setDeleteDialog(false);
+    setNotification({
+      open: true,
+      message: "Conta deletada com sucesso!",
+      severity: "success",
+    });
+    setTimeout(() => {
+      window.location.href = "/inicial";
+    }, 2000);
+  };
 
+  const handleCloseNotification = (event, reason) => {
+    if (reason === "clickaway") return;
+    setNotification({ ...notification, open: false });
+  };
 
-    },
-    submit: {
-        background: "#D9D9D9",
-        color: "#000000",
-        fontWeight: 700,
-        padding: 10,
-        margin: theme.spacing(1, 0, 2),
-    },
-    containerWrapper: {
-        display: "flex",
+  return (
+    <div className={classes.root}>
+      <Container maxWidth="md">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Typography variant="h4" color="primary" className={classes.header}>
+            Olá, Glívia
+          </Typography>
 
-        justifyContent: "space-between",
-        gap: theme.spacing(4),
-    },
-    container: {
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-    },
-    root: {
-        background: theme.palette.background,
-    },
-    mobileContainer: {
-        flex: 1,
+          <Typography variant="h6" gutterBottom>
+            Eventos favoritados:
+          </Typography>
+          {events.slice(0, visibleEvents).map((event, index) => (
+            <Card key={index} className={classes.card}>
+              <CardMedia
+                className={classes.cardMedia}
+                component="img"
+                src={event.image}
+                alt={event.title}
+              />
+              <CardContent className={classes.cardContent}>
+                <Typography variant="h6" gutterBottom>
+                  {event.title}
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                  <strong>ONG:</strong> {event.ong}
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                  <strong>Local:</strong> {event.local} <PlaceOutlined />
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                  <strong>Data:</strong> {event.date} <DateRangeOutlined />
+                </Typography>
+                <Typography variant="body2">
+                  <strong>Horário:</strong> {event.time}
+                </Typography>
+                <IconButton>
+                  <Star color="primary" />
+                </IconButton>
+                <IconButton>
+                  <ShareOutlined />
+                </IconButton>
+              </CardContent>
+            </Card>
+          ))}
+          <Button onClick={toggleEventsVisibility}>
+            {visibleEvents === 1 ? "Mostrar mais eventos" : "Mostrar menos eventos"}
+          </Button>
 
+          <Typography variant="h6" gutterBottom style={{ marginTop: 16 }}>
+            Minhas denúncias:
+          </Typography>
+          {reports.slice(0, visibleReports).map((report, index) => (
+            <Card key={index} className={classes.card}>
+              <CardContent className={classes.cardContent}>
+                <Typography variant="h6" gutterBottom>
+                  {report.title}
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                  <strong>Descrição:</strong> {report.description}
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                  <strong>Local:</strong> {report.location} <PlaceOutlined />
+                </Typography>
+                <Typography variant="body2">
+                  <strong>Data:</strong> {report.date} <DateRangeOutlined />
+                </Typography>
+                <Stepper
+                  activeStep={report.activeStep}
+                  alternativeLabel
+                  className={classes.stepper}
+                >
+                  {["Não enviada", "Em análise", "Finalizada"].map((label) => (
+                    <Step key={label}>
+                      <StepLabel>{label}</StepLabel>
+                    </Step>
+                  ))}
+                </Stepper>
+              </CardContent>
+            </Card>
+          ))}
+          <Button onClick={toggleReportsVisibility}>
+            {visibleReports === 1 ? "Mostrar mais denúncias" : "Mostrar menos denúncias"}
+          </Button>
 
-    },
-    hideOnMobile: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        [theme.breakpoints.down('sm')]: {
-            display: 'none',
-        },
-    },
-    instructions: {
-        marginTop: theme.spacing(1),
-        marginBottom: theme.spacing(1),
-      },
-}));
-
-
-
-
-const Perfil = () => {
-    const classes = useStyles();
-    const history = useHistory();
-    const [activeStep, setActiveStep] = React.useState(0);
-  const steps = getSteps();
-
-    const [expanded, setExpanded] = useState(false);
-    const [visibleEvents, setVisibleEvents] = useState(1); // Começa com 1 evento visível
-    const [visibleReports, setVisibleReports] = useState(1); // Começa com 1 evento visível
-
-  
-    const handleLoadMore = () => {
-      setVisibleEvents((prev) => Math.min(prev + 1, data.length)); // Carrega mais eventos
-    };
-    const handleLoadMoreReports = () => {
-        setVisibleReports((prev) => Math.min(prev + 1, data.length)); // Carrega mais eventos
-      };
-    function getSteps() {
-        return ['Não enviada', 'Em análise', 'Finalizada'];
-      }
-      
-
-
-    return (
-        <div className={classes.root}>
-            <Container component="main" maxWidth="md">
-                <CssBaseline />
-
-                <Container component="div" maxWidth="xs" className={classes.mobileContainer}>
-                    <div className={classes.paper}>
-                        <Grid container direction="column" justifyContent="center" style={{marginBottom:30}}>
-                            <Typography variant="h4" color="primary" style={{ textAlign: "center", fontWeight: 700 }}>Olá, Glívia</Typography>
-                            
-
-                        </Grid>
-                        <Typography style={{ marginRight: "10px", fontWeight: 600 }}>
-                                              Eventos favoritados:
-                                            </Typography>
-                        <Grid style={{ marginTop: 20 }} container direction="column" alignItems="center">
-                         
-                        { (
-                                  data.slice(0, visibleEvents).map((event, index) => (
-                                    <Grid item xs={12} key={index}>
-                                        <Card style={{ display: "flex", borderRadius: "12px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", border: "1px solid #ccc", marginBottom:7  }}>
-                                            {/* Imagem */}
-                                            <CardMedia
-                                                component="img"
-                                                style={{ width: "150px", objectFit: "cover", borderRadius: "12px 0 0 12px" }}
-                                                image={event.image}
-                                                alt={event.title}
-                                            />
-                                            {/* Conteúdo */}
-                                            <CardContent style={{ flex: "1", padding: "16px", position: "relative" }}>
-                                                <Typography variant="h6" style={{ fontWeight: "bold", marginBottom: "8px", fontSize:15 }}>
-                                                    {event.title}
-                                                </Typography>
-                                             
-                                              
-                                            
-                                                <Typography variant="body2" style={{ marginBottom: "4px" }}>
-                                                    <strong>ONG:</strong> {event.ong}
-                                                    
-                                                </Typography>
-                                                <Typography variant="body2" style={{ marginBottom: "4px" }}>
-                                                    <strong>Local:</strong> {event.local}
-                                                    <PlaceOutlined color="primary"/>
-                                                </Typography>
-                                                <Typography variant="body2" style={{ marginBottom: "4px" }}>
-                                                    <strong>Data:</strong> {event.date}
-                                                    <DateRangeOutlined  color="primary"/>
-                                                </Typography>
-                                                <Typography variant="body2">
-                                                    <strong>Horário:</strong> {event.time}
-                                                    <TimeToLeaveOutlined color="primary"/>
-                                                </Typography>
-                                                {/* Ícones */}
-                                                <div style={{  display: "flex" }}>
-                                                   
-                                                    <StarIcon style={{ color: "gold" }} />
-                                                   
-                                                    <IconButton size="small">
-                                                        <ShareOutlined />
-                                                    </IconButton>
-                                                </div>
-                                            </CardContent>
-                                        </Card>
-                                    </Grid>
-                                ))
-                            )}
-                             {visibleEvents < data.length && (
-            <Grid
-            container
-            justifyContent="center"
-            alignItems="center"
-            style={{ marginTop: "16px" }}
-            >
-            <Typography
-                onClick={handleLoadMore}
-                style={{
-                cursor: "pointer",
-                textDecoration: "underline",
-                fontSize: "14px",
-                }}
-            >
-                Mostrar mais eventos
-            </Typography>
+          <Grid container spacing={2} justifyContent="center" style={{ marginTop: 16 }}>
+            <Grid item>
+              <Button
+                variant="contained"
+                color="secondary"
+                startIcon={<ExitToApp />}
+                onClick={() => setLogoutDialog(true)}
+              >
+                Logout
+              </Button>
             </Grid>
-        )}
-        
-
-
-                        </Grid>
-                        <Typography style={{ marginRight: "10px", fontWeight: 600, marginTop:20, marginBottom:20 }}>
-                                              Minhas denúncias:
-                                            </Typography>
-                {(reports.slice(0, visibleReports).map((event, index) => (
-                                    <Grid item xs={12} key={index}>
-                                        <Card style={{ display: "flex", borderRadius: "12px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", border: "1px solid #ccc", marginBottom:7  }}>
-                                            
-                                            {/* Conteúdo */}
-                                            <CardContent style={{ flex: "1", padding: "16px", position: "relative" }}>
-                                                <Typography variant="h6" style={{ fontWeight: "bold", marginBottom: "8px", fontSize:19, textAlign:"center" }}>
-                                                    {event.title}
-                                                </Typography>
-                                             
-                                              
-                                            
-                                                <Typography variant="body2" style={{ marginBottom: "4px" }}>
-                                                    <strong>Descrição:</strong> {event.description}
-                                                    
-                                                </Typography>
-                                                <Typography variant="body2" style={{ marginBottom: "4px" }}>
-                                                    <strong>Local:</strong> {event.location}
-                                                    <PlaceOutlined color="primary"/>
-                                                </Typography>
-                                                <Typography variant="body2" style={{ marginBottom: "4px" }}>
-                                                    <strong>Data:</strong> {event.date}
-                                                    <DateRangeOutlined  color="primary"/>
-                                                </Typography>
-                                               
-                                                {/* Ícones */}
-                                                <div style={{  display: "flex" }}>
-                                                   
-                                                <Stepper activeStep={event.activeStep} alternativeLabel style={{padding:0, marginTop:10}}>
-                                                    {steps.map((label) => (
-                                                    <Step key={label}>
-                                                        <StepLabel>{label}</StepLabel>
-                                                    </Step>
-                                                    ))}
-                                                </Stepper>
-                                                </div>
-                                            </CardContent>
-                                        </Card>
-                                    </Grid>
-                                ))
-                            )}
-                                      {visibleReports < reports.length && (
-            <Grid
-            container
-            justifyContent="center"
-            alignItems="center"
-            style={{ marginTop: "16px" }}
-            >
-            <Typography
-                onClick={handleLoadMoreReports}
-                style={{
-                cursor: "pointer",
-                textDecoration: "underline",
-                fontSize: "14px",
-                }}
-            >
-                Mostrar mais denúncias
-            </Typography>
+            <Grid item>
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<Delete />}
+                onClick={() => setDeleteDialog(true)}
+              >
+                Deletar Conta
+              </Button>
             </Grid>
-        )}
-        
-                    </div>
-                </Container>
+          </Grid>
 
-            </Container>
+          <Dialog
+            open={logoutDialog}
+            onClose={() => setLogoutDialog(false)}
+            classes={{ paper: classes.dialogPaper }}
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              className: classes.backdrop,
+            }}
+          >
+            <DialogTitle>Confirmar Logout</DialogTitle>
+            <DialogContent>
+              <Typography>Tem certeza de que deseja sair?</Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setLogoutDialog(false)} color="secondary">
+                Cancelar
+              </Button>
+              <Button onClick={handleLogout} color="primary">
+                Confirmar
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          <Dialog
+            open={deleteDialog}
+            onClose={() => setDeleteDialog(false)}
+            classes={{ paper: classes.dialogPaper }}
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              className: classes.backdrop,
+            }}
+          >
+            <DialogTitle>Deletar Conta</DialogTitle>
+            <DialogContent>
+              <Typography gutterBottom>
+                Digite seu CPF para confirmar:
+              </Typography>
+              <TextField
+                fullWidth
+                value={cpf}
+                onChange={(e) => setCpf(e.target.value)}
+                placeholder="123.456.789-00"
+                margin="dense"
+                variant="outlined"
+                required
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setDeleteDialog(false)} color="secondary">
+                Cancelar
+              </Button>
+              <Button onClick={handleDeleteAccount} color="primary">
+                Confirmar
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          <Snackbar
+            open={notification.open}
+            autoHideDuration={6000}
+            onClose={handleCloseNotification}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          >
+            <Alert
+              elevation={6}
+              variant="filled"
+              onClose={handleCloseNotification}
+              severity={notification.severity}
+            >
+              {notification.message}
+            </Alert>
+          </Snackbar>
         </div>
-    );
+      </Container>
+    </div>
+  );
 };
 
-export default Perfil; 
+export default Perfil;
