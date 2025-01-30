@@ -19,8 +19,6 @@ import {
   TextField,
   Backdrop,
   Snackbar,
-  Backdrop,
-  Snackbar,
 } from "@material-ui/core";
 import {
   PlaceOutlined,
@@ -31,9 +29,6 @@ import {
   Delete,
 } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
-import Alert from "@material-ui/lab/Alert";
-import evento1 from "../../assets/evento1.png";
-import evento2 from "../../assets/evento2.png";
 import Alert from "@material-ui/lab/Alert";
 import evento1 from "../../assets/evento1.png";
 import evento2 from "../../assets/evento2.png";
@@ -112,11 +107,6 @@ const Perfil = () => {
     message: "",
     severity: "success",
   });
-  const [notification, setNotification] = useState({
-    open: false,
-    message: "",
-    severity: "success",
-  });
 
   const events = [
     {
@@ -160,10 +150,6 @@ const Perfil = () => {
     setVisibleEvents((prev) => (prev === 1 ? events.length : 1));
   };
 
-  const toggleReportsVisibility = () => {
-    setVisibleReports((prev) => (prev === 1 ? reports.length : 1));
-  };
-
   const handleLogout = () => {
     setLogoutDialog(false);
     setNotification({
@@ -175,16 +161,6 @@ const Perfil = () => {
       window.location.href = "/login";
     }, 2000);
   };
-
-  const handleDeleteAccount = () => {
-    if (!cpf.trim()) {
-      setNotification({
-        open: true,
-        message: "Por favor, digite um CPF válido!",
-        severity: "error",
-      });
-      return;
-    }
     
     setDeleteDialog(false);
     setNotification({
@@ -197,29 +173,8 @@ const Perfil = () => {
     }, 2000);
   };
 
-  const handleCloseNotification = (event, reason) => {
-    if (reason === "clickaway") return;
-    setNotification({ ...notification, open: false });
-  };
-
-  const toggleEventsVisibility = () => {
-    setVisibleEvents((prev) => (prev === 1 ? events.length : 1));
-  };
-
   const toggleReportsVisibility = () => {
     setVisibleReports((prev) => (prev === 1 ? reports.length : 1));
-  };
-
-  const handleLogout = () => {
-    setLogoutDialog(false);
-    setNotification({
-      open: true,
-      message: "Logout realizado com sucesso!",
-      severity: "success",
-    });
-    setTimeout(() => {
-      window.location.href = "/login";
-    }, 2000);
   };
 
   const handleDeleteAccount = () => {
@@ -389,6 +344,5 @@ const Perfil = () => {
       </Container>
     </div>
   );
-};
 
 export default Perfil;
