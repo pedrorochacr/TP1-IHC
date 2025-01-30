@@ -18,7 +18,7 @@ import {
 import { SearchOutlined } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import Alert from "@material-ui/lab/Alert";
-import denuncia from "../../assets/denuncia.png";
+import denuncia from "../../assets/denuncia.jpeg";
 
 const getLast6Months = () => {
   const months = [];
