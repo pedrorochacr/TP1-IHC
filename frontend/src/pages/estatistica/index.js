@@ -85,6 +85,7 @@ const useStyles = makeStyles((theme) => ({
     minHeight: "100vh",
     //padding: theme.spacing(4),
     marginTop: theme.spacing(8),
+    marginBottom: theme.spacing(8)
   },
   header: {
     textAlign: "center",
