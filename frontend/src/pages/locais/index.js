@@ -1,200 +1,222 @@
-import React, { useState, useContext } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import React, { useState } from "react";
 import {
-    Button,
-    CssBaseline,
-    TextField,
-    Grid,
-    Typography,
-    Container,
-    InputAdornment,
-    IconButton,
-    Link,
-    CircularProgress
-} from '@material-ui/core';
-
-
+  Typography,
+  TextField,
+  Button,
+  IconButton,
+  CircularProgress,
+  Grid,
+  Container,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  Backdrop,
+  Snackbar,
+} from "@material-ui/core";
+import { SearchOutlined } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
-import { SearchOutlined, Visibility, VisibilityOff } from "@material-ui/icons";
-import useAuth from "../../hooks/useAuth.js";
-import { i18n } from "../../translate/i18n";
-import logoTarget from "../../assets/logoLogin.png";
-import { AuthContext } from "../../context/Auth/AuthContext.js";
-import mapa from "../../assets/mapa.png"
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min.js";
-
-
+import Alert from "@material-ui/lab/Alert";
+import mapa from "../../assets/mapa.png";
 
 const useStyles = makeStyles((theme) => ({
-
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
+  root: {
+    backgroundColor: theme.palette.background.default,
+    minHeight: "100vh",
+    padding: theme.spacing(4),
+    marginTop: theme.spacing(8), // Adicionado marginTop para descer o conteúdo
+  },
+  header: {
+    textAlign: "center",
+    marginBottom: theme.spacing(4),
+    paddingTop: theme.spacing(4), // Espaçamento adicional superior
+  },
+  filterContainer: {
+    marginBottom: theme.spacing(4),
+    display: "flex",
+    justifyContent: "center",
+    gap: theme.spacing(2),
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
+      alignItems: "center",
     },
-    whatsapp: {
-        backgroundColor: '#32d951'
+  },
+  inputField: {
+    width: "250px",
+    backgroundColor: "#fff",
+    borderRadius: "8px",
+  },
+  button: {
+    padding: theme.spacing(1),
+    fontWeight: "bold",
+    borderRadius: "8px",
+  },
+  mapContainer: {
+    borderRadius: "12px",
+    overflow: "hidden",
+    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+    marginTop: theme.spacing(2),
+  },
+  loadingContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: "200px",
+  },
+  menuPaper: {
+    backgroundColor: "#fff",
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+    "& .MuiMenuItem-root": {
+      backgroundColor: "#fff !important",
+      color: "#333 !important",
+      "&:hover": {
+        backgroundColor: "#f5f5f5 !important",
+      },
     },
-    field: {
-        background: theme.palette.fieldBackground,
-        borderRadius: 109,
-        height: 30,
-        border: 'none'
-
-    },
-    form: {
-        width: "100%", // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-    },
-    paper: {
-        marginTop: theme.spacing(8),
-        display: "flex",
-        flexDirection: "column",
-
-        padding: theme.spacing(2),
-        borderRadius: theme.spacing(2),
-        borderColor: "#ffffff",
-
-        //backgroundColor: `rgba(${theme.palette.background.paper}, 0.8)`,
-
-
-    },
-    submit: {
-        background: "#D9D9D9",
-        color: "#000000",
-        fontWeight: 700,
-        padding: 10,
-        margin: theme.spacing(1, 0, 2),
-    },
-    containerWrapper: {
-        display: "flex",
-
-        justifyContent: "space-between",
-        gap: theme.spacing(4),
-    },
-    container: {
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-    },
-    root: {
-        background: theme.palette.background,
-    },
-    mobileContainer: {
-        flex: 1,
-
-
-    },
-    hideOnMobile: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        [theme.breakpoints.down('sm')]: {
-            display: 'none',
-        },
-    },
+  },
+  menuBackdrop: {
+    backgroundColor: "rgba(0, 0, 0, 0.5) !important",
+    zIndex: 9998,
+  },
 }));
 
-
-
-
 const Locais = () => {
-    const classes = useStyles();
-    const history = useHistory();
-    const [user, setUser] = useState({ email: "", password: "" });
-    const [showPassword, setShowPassword] = useState(false);
-    const [loading, setLoading] = useState(false);
+  const classes = useStyles();
+  const [local, setLocal] = useState("");
+  const [tipo, setTipo] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [notification, setNotification] = useState({
+    open: false,
+    message: "",
+  });
 
+  const menuProps = {
+    classes: {
+      paper: classes.menuPaper,
+    },
+    BackdropProps: {
+      className: classes.menuBackdrop,
+    },
+    anchorOrigin: {
+      vertical: "bottom",
+      horizontal: "left",
+    },
+    transformOrigin: {
+      vertical: "top",
+      horizontal: "left",
+    },
+    getContentAnchorEl: null,
+    disableAutoFocusItem: true,
+    disablePortal: true,
+    transitionDuration: 0,
+    MenuListProps: {
+      style: {
+        padding: 0,
+      },
+    },
+  };
 
-    const handleClick = () => {
-        setLoading(true); // Ativa o carregamento
-        setTimeout(() => {
-            setLoading(false); // Desativa após 2 segundos
-        }, 2000);
-    };
-    return (
-        //<div style={{ display: 'flex', 
-        //flexDirection: 'column', 
-        //minHeight: '100vh', 
-        // backgroundImage: `url(${loginBackground})`,
-        //backgroundSize: 'cover',
-        //backgroundRepeat: 'no-repeat',
-        //backgroundPosition: 'center'
-        //}}>
-        <div className={classes.root}>
-            <Container component="main" maxWidth="md">
-                <CssBaseline />
+  const handleSearch = () => {
+    if (!local || !tipo) {
+      setNotification({
+        open: true,
+        message: "Por favor, preencha ambos os campos antes de buscar.",
+      });
+      return;
+    }
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setNotification({
+        open: true,
+        message: "Locais encontrados com sucesso!",
+      });
+    }, 2000);
+  };
 
-                <Container component="div" maxWidth="xs" className={classes.mobileContainer}>
-                    <div className={classes.paper}>
-                        <Grid container direction="column" justifyContent="center">
-                            <Typography variant="h4" color="primary" style={{ textAlign: "center", fontWeight: 700 }}>Locais de Descarte</Typography>
-                            <Grid container direction="column" style={{ marginTop: 40 }}>
-                                <Grid container direction="column" spacing={2} style={{ width: '100%', maxWidth: '400px', margin: '0 auto' }}>
-                                    {/* Campo "Local" */}
-                                    <Grid item style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
-                                        <Typography style={{ marginRight: '10px', width: '50px', fontWeight: 600 }}>Local</Typography>
-                                        <input
-                                            type="text"
-                                            style={{
-                                                flex: 1,
-                                                padding: '8px',
-                                                fontSize: '14px',
-                                                border: '1px solid #ccc',
-                                                borderRadius: '4px',
-                                            }}
-                                        />
-                                        <IconButton onClick={handleClick}>
-                                            <SearchOutlined style={{ color: '#ffff', marginRight: '8px' }} />
-                                        </IconButton>
+  const handleCloseNotification = (event, reason) => {
+    if (reason === "clickaway") return;
+    setNotification({ ...notification, open: false });
+  };
 
-                                    </Grid>
+  return (
+    <div className={classes.root}>
+      <Container maxWidth="md">
+        <Typography variant="h4" color="primary" className={classes.header}>
+          Locais de Descarte
+        </Typography>
 
-                                    {/* Campo "Tipo" */}
-                                    <Grid item style={{ display: 'flex', alignItems: 'center' }}>
-                                        <Typography style={{ marginRight: '10px', width: '50px', fontWeight: 600 }}>Tipo</Typography>
-                                        <select
-                                            style={{
-                                                flex: 1,
-                                                padding: '8px',
-                                                fontSize: '14px',
-                                                border: '1px solid #ccc',
-                                                borderRadius: '4px',
-                                                backgroundColor: '#fff',
-                                            }}
-                                        >
-                                            <option value="" disabled selected>
-                                                Selecione uma opção
-                                            </option>
-                                            <option value="opcao1">Resíduos tóxicos </option>
-                                            <option value="opcao2">Plástico </option>
-                                            <option value="opcao3">Papel</option>
-                                            <option value="opcao3">Metal</option>
-                                            <option value="opcao3">Vidro</option>
-                                            <option value="opcao3">Eletrônicos</option>
-                                        </select>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
+        <div className={classes.filterContainer}>
+          <TextField
+            label="Local"
+            variant="outlined"
+            value={local}
+            onChange={(e) => setLocal(e.target.value)}
+            className={classes.inputField}
+            placeholder="Digite o local"
+            InputLabelProps={{ shrink: true }}
+            aria-label="Campo para o local do descarte"
+          />
 
-                        </Grid>
-                        {loading ? (
-                            <Grid container alignItems="center" justifyContent="center">
-                                <CircularProgress size={24} />
-                            </Grid>
+          <FormControl variant="outlined" className={classes.inputField}>
+            <InputLabel id="tipo-label">Tipo</InputLabel>
+            <Select
+              labelId="tipo-label"
+              value={tipo}
+              onChange={(e) => setTipo(e.target.value)}
+              label="Tipo"
+              aria-label="Campo para o tipo do descarte"
+              MenuProps={menuProps}
+            >
+              <MenuItem value="">Selecione uma opção</MenuItem>
+              <MenuItem value="residuos-toxicos">Resíduos tóxicos</MenuItem>
+              <MenuItem value="plastico">Plástico</MenuItem>
+              <MenuItem value="papel">Papel</MenuItem>
+              <MenuItem value="metal">Metal</MenuItem>
+              <MenuItem value="vidro">Vidro</MenuItem>
+              <MenuItem value="eletronicos">Eletrônicos</MenuItem>
+            </Select>
+          </FormControl>
 
-                        ) : (
-                            <Grid style={{ marginTop: 20 }}>
-                                <img src={mapa} style={{ width: "100%" }} />
-                            </Grid>
-
-                        )}
-                    </div>
-                </Container>
-
-            </Container>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<SearchOutlined />}
+            className={classes.button}
+            onClick={handleSearch}
+          >
+            Buscar
+          </Button>
         </div>
-    );
+
+        {loading ? (
+          <div className={classes.loadingContainer}>
+            <CircularProgress size={32} />
+          </div>
+        ) : (
+          <div className={classes.mapContainer}>
+            <img src={mapa} alt="Mapa de locais de descarte" style={{ width: "100%" }} />
+          </div>
+        )}
+
+        <Snackbar
+          open={notification.open}
+          autoHideDuration={6000}
+          onClose={handleCloseNotification}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert
+            elevation={6}
+            variant="filled"
+            onClose={handleCloseNotification}
+            severity={notification.message.includes("sucesso") ? "success" : "error"}
+          >
+            {notification.message}
+          </Alert>
+        </Snackbar>
+      </Container>
+    </div>
+  );
 };
 
-export default Locais; 
+export default Locais;
