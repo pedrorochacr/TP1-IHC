@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
     minHeight: "100vh",
     padding: theme.spacing(4),
     marginTop: theme.spacing(8), // Adicionado marginTop para descer o conteúdo
+    marginBottom: theme.spacing(5)
   },
   header: {
     textAlign: "center",

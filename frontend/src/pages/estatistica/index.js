@@ -261,7 +261,7 @@ const Estatistica = () => {
         <CssBaseline />
         
         <Typography variant="h3" className={classes.header}>
-          Estatísticas Ambientais
+          Estatísticas
         </Typography>
 
         {/* Filtros */}

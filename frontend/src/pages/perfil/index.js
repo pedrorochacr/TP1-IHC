@@ -311,7 +311,7 @@ const Perfil = () => {
         <Grid container justifyContent="center" style={{marginTop: 20}}>
               <Button
                 variant="contained"
-                color="primary"
+                className={classes.deleteButton}
                 startIcon={<Delete />}
                 onClick={() => setDeleteDialog(true)}
               >

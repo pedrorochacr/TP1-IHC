@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#f9f9f9",
     borderRadius: "8px",
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+    marginBottom: theme.spacing(8)
   },
   form: {
     display: "flex",
@@ -262,7 +263,7 @@ const Denuncias = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancel} color="secondary">
-            Cancelar
+            Voltar à edição
           </Button>
           <Button onClick={handleConfirm} color="primary">
             Confirmar

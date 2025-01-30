@@ -32,9 +32,11 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.default,
     minHeight: "100vh",
     padding: theme.spacing(4, 0),
+    marginBottom: theme.spacing(3)
   },
   header: {
     textAlign: "center",
+    fontWeight: 700,
     marginBottom: theme.spacing(4),
     marginTop: theme.spacing(6),
   },
@@ -166,7 +168,7 @@ const Eventos = () => {
   return (
     <div className={classes.root}>
       <Container maxWidth="md">
-        <Typography variant="h4" color="primary" className={classes.header}>
+        <Typography variant="h3" className={classes.header}>
           Eventos
         </Typography>
 
