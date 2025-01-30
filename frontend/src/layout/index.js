@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import React, { useState, useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { makeStyles, AppBar, Toolbar, IconButton } from "@material-ui/core";
+import { makeStyles, AppBar, Toolbar, IconButton, Grid, Typography, MenuItem, Menu } from "@material-ui/core";
 import clsx from "clsx";
 import { AuthContext } from "../context/Auth/AuthContext";
 import HomeIcon from "@material-ui/icons/Home";
@@ -9,7 +9,7 @@ import LocationOnIcon from "@material-ui/icons/LocationOn";
 import DateRangeOutlined from "@material-ui/icons/DateRangeOutlined";
 import EqualizerOutlined from "@material-ui/icons/EqualizerOutlined";
 import PersonIcon from "@material-ui/icons/Person";
-
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -32,7 +32,12 @@ const useStyles = makeStyles((theme) => ({
     }),
   },
   toolbar: {
-    paddingRight: 24,
+    paddingRight: 24, // keep right padding when drawer closed
+    color: "white",
+   
+    display: "flex",
+    justifyContent: "end",
+
   },
   content: {
     flexGrow: 1,
@@ -74,13 +79,22 @@ const LoggedInLayout = ({ children }) => {
   const history = useHistory();
   const location = useLocation();
   const [drawerOpen, setDrawerOpen] = useState(false);
-
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
     if (document.body.offsetWidth > 600) {
       setDrawerOpen(true);
     }
   }, []);
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+    setMenuOpen(true);
+  };
 
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+    setMenuOpen(false);
+  };
   return (
     <div className={classes.root}>
       <AppBar 
@@ -92,6 +106,45 @@ const LoggedInLayout = ({ children }) => {
           variant="regular" 
           className={clsx(classes.toolbar, drawerOpen && classes.alignProfileIcon)}
         >
+          <div>
+            <Grid container alignItems="center">
+              <Typography style={{fontWeight:600, fontSize:20}}>Olá, Glivia</Typography>
+            <IconButton
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleMenu}
+              variant="contained"
+              style={{ color: "white" }}
+            >
+              <AccountCircleIcon />
+             
+            </IconButton>
+            </Grid>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              getContentAnchorEl={null}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={menuOpen}
+              onClose={handleCloseMenu}
+            >
+              <MenuItem onClick={()=>console.log("perfil")} style={{backgroundColor: "white"}}>
+                Perfil
+              </MenuItem>
+              <MenuItem onClick={()=>console.log("logout")} style={{backgroundColor: "white"}}>
+                 Logout
+              </MenuItem>
+            </Menu>
+            
+          </div>
         </Toolbar>
       </AppBar>
 

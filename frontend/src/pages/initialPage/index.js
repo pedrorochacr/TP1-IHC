@@ -53,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 const InitialPage = () => {
   const classes = useStyles();
   const history = useHistory();
