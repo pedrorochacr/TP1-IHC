@@ -55,21 +55,17 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     display: "flex",
+    flexDirection: "column",
     borderRadius: "12px",
     boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+    backgroundColor: "#fff",
     marginBottom: theme.spacing(2),
-    [theme.breakpoints.down("sm")]: {
-      flexDirection: "column",
-    },
   },
   cardMedia: {
-    width: "150px",
+    height: "150px",
+    borderTopLeftRadius: "12px",
+    borderTopRightRadius: "12px",
     objectFit: "cover",
-    borderRadius: "12px 0 0 12px",
-    [theme.breakpoints.down("sm")]: {
-      width: "100%",
-      borderRadius: "12px 12px 0 0",
-    },
   },
   cardContent: {
     flex: 1,
@@ -151,7 +147,7 @@ const Eventos = () => {
 
   const handleSearch = () => {
     setLoading(true);
-    
+
     setTimeout(() => {
       setLoading(false);
       setNotification({
@@ -222,13 +218,16 @@ const Eventos = () => {
                       <strong>ONG:</strong> {event.ong}
                     </Typography>
                     <Typography variant="body2">
-                      <strong>Local:</strong> {event.local} <PlaceOutlined color="primary" />
+                      <strong>Local:</strong> {event.local}{" "}
+                      <PlaceOutlined color="primary" />
                     </Typography>
                     <Typography variant="body2">
-                      <strong>Data:</strong> {event.date} <DateRangeOutlined color="primary" />
+                      <strong>Data:</strong> {event.date}{" "}
+                      <DateRangeOutlined color="primary" />
                     </Typography>
                     <Typography variant="body2">
-                      <strong>Horário:</strong> {event.time} <TimeToLeaveOutlined color="primary" />
+                      <strong>Horário:</strong> {event.time}{" "}
+                      <TimeToLeaveOutlined color="primary" />
                     </Typography>
                     <div className={classes.actionIcons}>
                       <IconButton
