@@ -152,7 +152,7 @@ const Eventos = () => {
       setLoading(false);
       setNotification({
         open: true,
-        message: "Eventos atualizados com sucesso!",
+        message: "Eventos encontrados com sucesso!",
         severity: "success",
       });
     }, 2000);
