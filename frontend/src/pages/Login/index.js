@@ -88,7 +88,7 @@ const Login = () => {
             label="Usuário"
             name="email"
             className={classes.field}
-            placeholder="Opcional"
+            placeholder="Usuário"
           />
           <TextField
             variant="outlined"
@@ -96,7 +96,7 @@ const Login = () => {
             type="password"
             name="password"
             className={classes.field}
-            placeholder="Opcional"
+            placeholder="Senha"
           />
           <div className={classes.forgotPassword}>
             <Typography

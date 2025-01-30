@@ -124,7 +124,7 @@ const Registration = () => {
               variant="outlined"
               margin="normal"
               fullWidth
-              label="CPF/CNPJ"
+              label="CPF"
               name="cpfCnpj"
               value={user.cpfCnpj}
               onChange={handleChangeInput}
