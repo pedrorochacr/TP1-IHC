@@ -14,11 +14,19 @@ import {
   Select,
   MenuItem,
   Backdrop,
+  Card,
+  Divider,
+  Box,
 } from "@material-ui/core";
-import { SearchOutlined } from "@material-ui/icons";
+import { 
+  SearchOutlined,
+  DateRangeOutlined,
+  WarningOutlined 
+} from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import Alert from "@material-ui/lab/Alert";
 import denuncia from "../../assets/denuncia.jpeg";
+import { useTheme } from '@material-ui/core/styles';
 
 const getLast6Months = () => {
   const months = [];
@@ -35,41 +43,54 @@ const getLast6Months = () => {
 const chartOptions = {
   chart: {
     id: "dynamic-bar",
-    toolbar: {
-      show: false,
-    },
+    toolbar: { show: false },
+    foreColor: '#373d3f'
   },
   xaxis: {
     categories: getLast6Months(),
+    labels: { style: { fontSize: '14px' } }
   },
+  yaxis: {
+    labels: { style: { fontSize: '14px' } }
+  },
+  plotOptions: {
+    bar: {
+      borderRadius: 8,
+      columnWidth: '60%',
+    }
+  },
+  dataLabels: { enabled: false },
+  colors: ['#2E7D32'],
   title: {
     text: "Últimos 6 Meses",
     align: "center",
-    style: {
-      fontSize: "16px",
-      fontWeight: 600,
-    },
+    style: { fontSize: "18px", fontWeight: 600 }
   },
+  grid: {
+    borderColor: '#f1f3f4',
+    strokeDashArray: 5
+  }
 };
 
 const chartSeries = [
   {
     name: "Denúncias",
     data: [12, 19, 10, 15, 22, 13],
-  },
+  }
 ];
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.default,
     minHeight: "100vh",
-    padding: theme.spacing(4),
+    //padding: theme.spacing(4),
     marginTop: theme.spacing(8),
   },
   header: {
     textAlign: "center",
     marginBottom: theme.spacing(4),
     fontWeight: 700,
+    color: theme.palette.primary.main
   },
   filterContainer: {
     marginBottom: theme.spacing(4),
@@ -85,44 +106,93 @@ const useStyles = makeStyles((theme) => ({
     width: "250px",
     backgroundColor: "#fff",
     borderRadius: "8px",
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "8px",
+    },
   },
   button: {
-    padding: theme.spacing(1),
-    fontWeight: "bold",
+    padding: theme.spacing(1.5, 4),
+    fontWeight: 600,
     borderRadius: "8px",
+    textTransform: 'none',
+    fontSize: '16px'
+  },
+  sectionCard: {
+    backgroundColor: "#fff",
+    borderRadius: "16px",
+    padding: theme.spacing(4),
+    margin: theme.spacing(3, 0),
+    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.06)",
+    border: `1px solid ${theme.palette.divider}`,
+    maxWidth: "800px",
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
+  sectionHeader: {
+    marginBottom: theme.spacing(3),
+    fontWeight: 700,
+    color: theme.palette.primary.main,
+    display: "flex",
+    alignItems: "center",
+    gap: theme.spacing(2),
+    fontSize: '20px'
   },
   mapContainer: {
     borderRadius: "12px",
     overflow: "hidden",
-    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
-    marginTop: theme.spacing(3),
+    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+    marginTop: theme.spacing(2),
+    border: `1px solid ${theme.palette.divider}`,
+    width: "100%",
+  },
+  chartContainer: {
+    marginTop: theme.spacing(2),
+    padding: theme.spacing(3),
+    backgroundColor: "#f8f9fa",
+    borderRadius: "12px",
+  },
+  riskSection: {
+    display: "flex",
+    flexDirection: "column",
+    gap: theme.spacing(2),
+    padding: theme.spacing(3),
+    backgroundColor: "#f8f9fa",
+    borderRadius: "12px",
+  },
+  locationItem: {
+    padding: theme.spacing(2),
+    borderRadius: "8px",
+    backgroundColor: "#fff",
+    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.05)",
+    transition: "all 0.2s ease",
+    "&:hover": {
+      transform: "translateY(-2px)",
+      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+    },
+  },
+  categorySelector: {
+    backgroundColor: "#fff",
+    borderRadius: "8px",
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "8px",
+    },
+  },
+  divider: {
+    margin: theme.spacing(4, 0),
+    backgroundColor: theme.palette.divider,
+    height: 2
   },
   loadingContainer: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    minHeight: "200px",
-  },
-  sectionTitle: {
-    margin: theme.spacing(3, 0, 1),
-    fontWeight: 600,
-  },
-  locationsList: {
-    fontWeight: 600,
-    lineHeight: 1.8,
-    paddingLeft: theme.spacing(2),
-  },
-  categorySelector: {
-    backgroundColor: "#fff",
-    borderRadius: "4px",
-    marginTop: theme.spacing(1),
+    minHeight: "300px",
   },
   menuPaper: {
     backgroundColor: "#fff",
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
     "& .MuiMenuItem-root": {
-      backgroundColor: "#fff !important",
-      color: "#333 !important",
+      padding: theme.spacing(1.5, 2),
       "&:hover": {
         backgroundColor: "#f5f5f5 !important",
       },
@@ -144,31 +214,18 @@ const Estatistica = () => {
     message: "",
     severity: "success",
   });
+  const theme = useTheme();
 
   const menuProps = {
-    classes: {
-      paper: classes.menuPaper,
-    },
-    BackdropProps: {
-      className: classes.menuBackdrop,
-    },
-    anchorOrigin: {
-      vertical: "bottom",
-      horizontal: "left",
-    },
-    transformOrigin: {
-      vertical: "top",
-      horizontal: "left",
-    },
+    classes: { paper: classes.menuPaper },
+    BackdropProps: { className: classes.menuBackdrop },
+    anchorOrigin: { vertical: "bottom", horizontal: "left" },
+    transformOrigin: { vertical: "top", horizontal: "left" },
     getContentAnchorEl: null,
     disableAutoFocusItem: true,
     disablePortal: true,
     transitionDuration: 0,
-    MenuListProps: {
-      style: {
-        padding: 0,
-      },
-    },
+    MenuListProps: { style: { padding: 0 } },
   };
 
   const handleSearch = () => {
@@ -199,12 +256,14 @@ const Estatistica = () => {
 
   return (
     <div className={classes.root}>
-      <Container maxWidth="md">
+      <Container maxWidth="lg">
         <CssBaseline />
-        <Typography variant="h4" color="primary" className={classes.header}>
-          Estatísticas
+        
+        <Typography variant="h3" className={classes.header}>
+          Estatísticas Ambientais
         </Typography>
 
+        {/* Filtros */}
         <div className={classes.filterContainer}>
           <TextField
             label="Localização"
@@ -212,7 +271,7 @@ const Estatistica = () => {
             value={localizacao}
             onChange={(e) => setLocalizacao(e.target.value)}
             className={classes.inputField}
-            placeholder="Digite a localização"
+            placeholder="Ex: Centro, São Paulo"
           />
           <Button
             variant="contained"
@@ -221,67 +280,108 @@ const Estatistica = () => {
             className={classes.button}
             onClick={handleSearch}
           >
-            Buscar
+            Buscar Dados
           </Button>
         </div>
 
-        
-        {loading ? (
-          <div className={classes.loadingContainer}>
-            <CircularProgress size={32} />
+        {/* Seção 1: Mapa de Denúncias */}
+        <Card className={classes.sectionCard}>
+          <Typography variant="h5" className={classes.sectionHeader}>
+            <WarningOutlined fontSize="inherit" />
+            Densidade de Denúncias (raio de 5km)
+          </Typography>
+          {loading ? (
+            <div className={classes.loadingContainer}>
+              <CircularProgress size={48} color="primary" />
+            </div>
+          ) : (
+            <div className={classes.mapContainer}>
+              <img 
+                src={denuncia} 
+                alt="Mapa de calor de denúncias" 
+                style={{ 
+                  width: "100%",
+                  border: `1px solid ${theme.palette.divider}`,
+                  borderRadius: "12px"
+                }} 
+              />
+            </div>
+          )}
+        </Card>
+
+        <Divider className={classes.divider} />
+
+        {/* Seção 2: Gráfico Anual */}
+        <Card className={classes.sectionCard}>
+          <Typography variant="h5" className={classes.sectionHeader}>
+            <DateRangeOutlined fontSize="inherit" />
+            Distribuição Temporal de Ocorrências
+          </Typography>
+          <div className={classes.chartContainer}>
+            <ReactApexChart 
+              options={chartOptions} 
+              series={chartSeries} 
+              type="bar" 
+              height={350} 
+            />
           </div>
-        ) : (
-          <>
-          <Typography className={classes.sectionTitle}>
-          Número de denúncias (raio de 5km):
-        </Typography>
-          <div className={classes.mapContainer}>
-            <img src={denuncia} alt="Mapa de denúncias" style={{ width: "100%" }} />
-          </div>
-          <Typography className={classes.sectionTitle}>
-          Distribuição ao longo do ano:
-        </Typography>
-        <ReactApexChart options={chartOptions} series={chartSeries} type="bar" height={350} />
+        </Card>
 
-        <Typography className={classes.sectionTitle}>
-          Locais com maior risco de acúmulo:
-        </Typography>
-        
-        <Grid container spacing={3} alignItems="center">
-          <Grid item xs={12} md={6}>
-            <FormControl variant="outlined" fullWidth className={classes.categorySelector}>
-              <InputLabel>Categoria</InputLabel>
-              <Select
-                value={categoria}
-                onChange={(e) => setCategoria(e.target.value)}
-                label="Categoria"
-                MenuProps={menuProps}
-              >
-                <MenuItem value="">
-                  <em>Selecione uma categoria</em>
-                </MenuItem>
-                <MenuItem value="residuos-toxicos">Resíduos tóxicos</MenuItem>
-                <MenuItem value="plastico">Plástico</MenuItem>
-                <MenuItem value="papel">Papel</MenuItem>
-                <MenuItem value="metal">Metal</MenuItem>
-                <MenuItem value="vidro">Vidro</MenuItem>
-                <MenuItem value="eletronicos">Eletrônicos</MenuItem>
-              </Select>
-            </FormControl>
+        <Divider className={classes.divider} />
+
+        {/* Seção 3: Locais de Risco */}
+        <Card className={classes.sectionCard}>
+          <Typography variant="h5" className={classes.sectionHeader}>
+            <WarningOutlined fontSize="inherit" />
+            Áreas Críticas de Acúmulo de Resíduos
+          </Typography>
+          
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={6}>
+              <FormControl variant="outlined" fullWidth className={classes.categorySelector}>
+                <InputLabel>Categoria de Resíduo</InputLabel>
+                <Select
+                  value={categoria}
+                  onChange={(e) => setCategoria(e.target.value)}
+                  label="Categoria"
+                  MenuProps={menuProps}
+                >
+                  <MenuItem value="">
+                    <em>Selecione uma categoria</em>
+                  </MenuItem>
+                  <MenuItem value="residuos-toxicos">Resíduos Tóxicos</MenuItem>
+                  <MenuItem value="plastico">Plástico</MenuItem>
+                  <MenuItem value="papel">Papel</MenuItem>
+                  <MenuItem value="metal">Metal</MenuItem>
+                  <MenuItem value="vidro">Vidro</MenuItem>
+                  <MenuItem value="eletronicos">Eletrônicos</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <Box className={classes.riskSection}>
+                <Typography variant="h6" gutterBottom color="textSecondary">
+                  Ranking de Locais Críticos:
+                </Typography>
+                {[
+                  { name: "Lagoa da Pampulha", count: 152 },
+                  { name: "Mercado Central", count: 128 },
+                  { name: "Praça da Liberdade", count: 115 }
+                ].map((item, index) => (
+                  <Card key={index} className={classes.locationItem}>
+                    <Typography variant="body1">
+                      {index + 1}. {item.name}
+                      <Box component="span" display="block" color="textSecondary" mt={0.5}>
+                        {item.count} ocorrências registradas
+                      </Box>
+                    </Typography>
+                  </Card>
+                ))}
+              </Box>
+            </Grid>
           </Grid>
-
-          <Grid item xs={12} md={6}>
-            <Typography className={classes.locationsList}>
-              1. Lagoa da Pampulha <br />
-              2. Mercado Central <br />
-              3. Praça da Liberdade
-            </Typography>
-          </Grid>
-        </Grid>
-        </>
-        )}
-
-        
+        </Card>
 
         <Snackbar
           open={notification.open}
@@ -294,6 +394,7 @@ const Estatistica = () => {
             variant="filled"
             onClose={handleCloseNotification}
             severity={notification.severity}
+            style={{ borderRadius: '8px' }}
           >
             {notification.message}
           </Alert>
