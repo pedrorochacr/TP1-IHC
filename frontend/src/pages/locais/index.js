@@ -11,7 +11,6 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
-  Backdrop,
   Snackbar,
 } from "@material-ui/core";
 import { SearchOutlined } from "@material-ui/icons";
@@ -23,14 +22,16 @@ const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.default,
     minHeight: "100vh",
-    padding: theme.spacing(4),
-    marginTop: theme.spacing(8), // Adicionado marginTop para descer o conteúdo
-    marginBottom: theme.spacing(5)
+    //padding: theme.spacing(4),
+    //marginTop: theme.spacing(0),
+    marginBottom: theme.spacing(5),
   },
   header: {
     textAlign: "center",
+    fontWeight: 700, // Alinhado com o padrão
     marginBottom: theme.spacing(4),
-    paddingTop: theme.spacing(4), // Espaçamento adicional superior
+    marginTop: theme.spacing(8), // Alinhado com o padrão
+    color: theme.palette.primary.main, // Alinhado com o padrão
   },
   filterContainer: {
     marginBottom: theme.spacing(4),
@@ -143,7 +144,7 @@ const Locais = () => {
   return (
     <div className={classes.root}>
       <Container maxWidth="md">
-        <Typography variant="h4" color="primary" className={classes.header}>
+        <Typography variant="h3" className={classes.header}>
           Locais de Descarte
         </Typography>
 
@@ -155,7 +156,6 @@ const Locais = () => {
             onChange={(e) => setLocal(e.target.value)}
             className={classes.inputField}
             placeholder="Digite o local"
-            //InputLabelProps={{ shrink: true }}
             aria-label="Campo para o local do descarte"
           />
 

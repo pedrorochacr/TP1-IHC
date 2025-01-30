@@ -32,13 +32,14 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.default,
     minHeight: "100vh",
     padding: theme.spacing(4, 0),
-    marginBottom: theme.spacing(3)
+    marginBottom: theme.spacing(3),
   },
   header: {
     textAlign: "center",
-    fontWeight: 700,
+    fontWeight: 700, // Peso da fonte
     marginBottom: theme.spacing(4),
-    marginTop: theme.spacing(6),
+    //marginTop: theme.spacing(8), // Margem superior alinhada ao padrão
+    color: theme.palette.primary.main, // Cor alinhada ao padrão
   },
   filterContainer: {
     marginBottom: theme.spacing(4),
