@@ -22,7 +22,7 @@ import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    backgroundColor: "#F5F5F5",
+    backgroundColor: theme.palette.background.default,
     minHeight: "100vh",
     display: "flex",
     alignItems: "center",
