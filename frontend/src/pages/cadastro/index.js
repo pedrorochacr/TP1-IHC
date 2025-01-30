@@ -47,12 +47,6 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "#5A0D90",
     },
   },
-  backButton: {
-    position: "absolute",
-    left: theme.spacing(2),
-    top: theme.spacing(2),
-    color: "#6A0DAD",
-  },
 }));
 
 const Registration = () => {
@@ -82,7 +76,6 @@ const Registration = () => {
     e.preventDefault();
     setLoading(true);
 
-    // Simula o processamento do cadastro
     setTimeout(() => {
       setLoading(false);
       setNotification({
@@ -91,7 +84,6 @@ const Registration = () => {
         severity: "success",
       });
 
-      // Redireciona para a página de login após 2 segundos
       setTimeout(() => {
         history.push("/login");
       }, 2000);
@@ -106,10 +98,14 @@ const Registration = () => {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <IconButton className={classes.backButton} onClick={() => history.push("/inicial")}>
-        <ArrowBackIosIcon />
-      </IconButton>
       <Card className={classes.card}>
+        <div
+          style={{ display: "flex", alignItems: "center", cursor: "pointer", marginBottom: "16px" }}
+          onClick={() => history.push("/inicial")}
+        >
+          <ArrowBackIosIcon fontSize="small" />
+          <Typography variant="body2">Voltar</Typography>
+        </div>
         <CardContent>
           <Typography variant="h5" align="center" gutterBottom>
             Criar Conta
