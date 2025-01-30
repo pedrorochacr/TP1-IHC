@@ -76,7 +76,7 @@ const Login = () => {
       <div className={classes.container}>
         <div
           style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
-          onClick={() => history.push("/")}
+          onClick={() => history.push("/inicial")}
         >
           <ArrowBackIosIcon fontSize="small" />
           <Typography variant="body2">Voltar</Typography>
