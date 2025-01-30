@@ -154,7 +154,7 @@ const Locais = () => {
             onChange={(e) => setLocal(e.target.value)}
             className={classes.inputField}
             placeholder="Digite o local"
-            InputLabelProps={{ shrink: true }}
+            //InputLabelProps={{ shrink: true }}
             aria-label="Campo para o local do descarte"
           />
 
