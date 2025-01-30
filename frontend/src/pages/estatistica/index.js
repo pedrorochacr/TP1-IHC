@@ -225,20 +225,20 @@ const Estatistica = () => {
           </Button>
         </div>
 
-        <Typography className={classes.sectionTitle}>
-          Número de denúncias (raio de 5km):
-        </Typography>
+        
         {loading ? (
           <div className={classes.loadingContainer}>
             <CircularProgress size={32} />
           </div>
         ) : (
+          <>
+          <Typography className={classes.sectionTitle}>
+          Número de denúncias (raio de 5km):
+        </Typography>
           <div className={classes.mapContainer}>
             <img src={denuncia} alt="Mapa de denúncias" style={{ width: "100%" }} />
           </div>
-        )}
-
-        <Typography className={classes.sectionTitle}>
+          <Typography className={classes.sectionTitle}>
           Distribuição ao longo do ano:
         </Typography>
         <ReactApexChart options={chartOptions} series={chartSeries} type="bar" height={350} />
@@ -278,6 +278,10 @@ const Estatistica = () => {
             </Typography>
           </Grid>
         </Grid>
+        </>
+        )}
+
+        
 
         <Snackbar
           open={notification.open}

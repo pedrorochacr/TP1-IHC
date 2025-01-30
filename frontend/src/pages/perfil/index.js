@@ -37,7 +37,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.default,
     minHeight: "100vh",
-    padding: theme.spacing(4),
   },
   paper: {
     padding: theme.spacing(3),
@@ -188,9 +187,7 @@ const Perfil = () => {
       <Container maxWidth="md">
         <CssBaseline />
         <div className={classes.paper}>
-          <Typography variant="h4" color="primary" className={classes.header}>
-            Olá, Glívia
-          </Typography>
+         
 
           <Typography variant="h6" gutterBottom>
             Eventos favoritados:
@@ -232,66 +229,16 @@ const Perfil = () => {
             {visibleEvents === 1 ? "Mostrar mais eventos" : "Mostrar menos eventos"}
           </Button>
 
-          <Typography variant="h6" gutterBottom style={{ marginTop: 16 }}>
-            Minhas denúncias:
-          </Typography>
-          {reports.slice(0, visibleReports).map((report, index) => (
-            <Card key={index} className={classes.card}>
-              <CardContent className={classes.cardContent}>
-                <Typography variant="h6" gutterBottom>
-                  {report.title}
-                </Typography>
-                <Typography variant="body2" gutterBottom>
-                  <strong>Descrição:</strong> {report.description}
-                </Typography>
-                <Typography variant="body2" gutterBottom>
-                  <strong>Local:</strong> {report.location} <PlaceOutlined />
-                </Typography>
-                <Typography variant="body2">
-                  <strong>Data:</strong> {report.date} <DateRangeOutlined />
-                </Typography>
-                <Stepper
-                  activeStep={report.activeStep}
-                  alternativeLabel
-                  className={classes.stepper}
-                >
-                  {["Não enviada", "Em análise", "Finalizada"].map((label) => (
-                    <Step key={label}>
-                      <StepLabel>{label}</StepLabel>
-                    </Step>
-                  ))}
-                </Stepper>
-              </CardContent>
-            </Card>
-          ))}
-          <Button onClick={toggleReportsVisibility}>
-            {visibleReports === 1 ? "Mostrar mais denúncias" : "Mostrar menos denúncias"}
-          </Button>
+         
 
           <Grid container spacing={2} justifyContent="center" style={{ marginTop: 16 }}>
             <Grid item>
-              <Button
-                variant="contained"
-                color="secondary"
-                startIcon={<ExitToApp />}
-                onClick={() => setLogoutDialog(true)}
-              >
-                Logout
-              </Button>
+             
             </Grid>
-            <Grid item>
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<Delete />}
-                onClick={() => setDeleteDialog(true)}
-              >
-                Deletar Conta
-              </Button>
-            </Grid>
+            
           </Grid>
-
-          <Dialog
+       
+          <Dialog 
             open={logoutDialog}
             onClose={() => setLogoutDialog(false)}
             classes={{ paper: classes.dialogPaper }}
@@ -347,7 +294,7 @@ const Perfil = () => {
               </Button>
             </DialogActions>
           </Dialog>
-
+         
           <Snackbar
             open={notification.open}
             autoHideDuration={6000}
@@ -364,6 +311,16 @@ const Perfil = () => {
             </Alert>
           </Snackbar>
         </div>
+        <Grid container justifyContent="center" style={{marginTop:20}} alignItems="center" alignContent="center">
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<Delete />}
+                onClick={() => setDeleteDialog(true)}
+              >
+                Deletar Conta
+              </Button>
+            </Grid>
       </Container>
     </div>
   );
