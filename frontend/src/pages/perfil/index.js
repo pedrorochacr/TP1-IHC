@@ -18,6 +18,7 @@ import {
   DialogActions,
   TextField,
   Backdrop,
+  Snackbar,
 } from "@material-ui/core";
 import {
   PlaceOutlined,
@@ -28,6 +29,7 @@ import {
   Delete,
 } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
+import Alert from "@material-ui/lab/Alert";
 import evento1 from "../../assets/evento1.png";
 import evento2 from "../../assets/evento2.png";
 
@@ -91,6 +93,11 @@ const Perfil = () => {
   const [logoutDialog, setLogoutDialog] = useState(false);
   const [deleteDialog, setDeleteDialog] = useState(false);
   const [cpf, setCpf] = useState("");
+  const [notification, setNotification] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   const events = [
     {
@@ -140,17 +147,40 @@ const Perfil = () => {
 
   const handleLogout = () => {
     setLogoutDialog(false);
-    window.location.href = "/login";
+    setNotification({
+      open: true,
+      message: "Logout realizado com sucesso!",
+      severity: "success",
+    });
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, 2000);
   };
 
   const handleDeleteAccount = () => {
-    if (cpf === "12345678900") {
-      setDeleteDialog(false);
-      alert("Conta deletada com sucesso!");
-      window.location.href = "/login";
-    } else {
-      alert("CPF incorreto. Tente novamente.");
+    if (!cpf.trim()) {
+      setNotification({
+        open: true,
+        message: "Por favor, digite um CPF válido!",
+        severity: "error",
+      });
+      return;
     }
+    
+    setDeleteDialog(false);
+    setNotification({
+      open: true,
+      message: "Conta deletada com sucesso!",
+      severity: "success",
+    });
+    setTimeout(() => {
+      window.location.href = "/inicial";
+    }, 2000);
+  };
+
+  const handleCloseNotification = (event, reason) => {
+    if (reason === "clickaway") return;
+    setNotification({ ...notification, open: false });
   };
 
   return (
@@ -162,7 +192,6 @@ const Perfil = () => {
             Olá, Glívia
           </Typography>
 
-          {/* Seção de Eventos */}
           <Typography variant="h6" gutterBottom>
             Eventos favoritados:
           </Typography>
@@ -200,10 +229,9 @@ const Perfil = () => {
             </Card>
           ))}
           <Button onClick={toggleEventsVisibility}>
-            {visibleEvents === 1 ? 'Mostrar mais eventos' : 'Mostrar menos eventos'}
+            {visibleEvents === 1 ? "Mostrar mais eventos" : "Mostrar menos eventos"}
           </Button>
 
-          {/* Seção de Denúncias */}
           <Typography variant="h6" gutterBottom style={{ marginTop: 16 }}>
             Minhas denúncias:
           </Typography>
@@ -237,10 +265,9 @@ const Perfil = () => {
             </Card>
           ))}
           <Button onClick={toggleReportsVisibility}>
-            {visibleReports === 1 ? 'Mostrar mais denúncias' : 'Mostrar menos denúncias'}
+            {visibleReports === 1 ? "Mostrar mais denúncias" : "Mostrar menos denúncias"}
           </Button>
 
-          {/* Botões de Ação */}
           <Grid container spacing={2} justifyContent="center" style={{ marginTop: 16 }}>
             <Grid item>
               <Button
@@ -264,7 +291,6 @@ const Perfil = () => {
             </Grid>
           </Grid>
 
-          {/* Dialog de Logout */}
           <Dialog
             open={logoutDialog}
             onClose={() => setLogoutDialog(false)}
@@ -288,7 +314,6 @@ const Perfil = () => {
             </DialogActions>
           </Dialog>
 
-          {/* Dialog de Deletar Conta */}
           <Dialog
             open={deleteDialog}
             onClose={() => setDeleteDialog(false)}
@@ -301,7 +326,7 @@ const Perfil = () => {
             <DialogTitle>Deletar Conta</DialogTitle>
             <DialogContent>
               <Typography gutterBottom>
-                Digite seu CPF para confirmar a exclusão:
+                Digite seu CPF para confirmar:
               </Typography>
               <TextField
                 fullWidth
@@ -310,6 +335,7 @@ const Perfil = () => {
                 placeholder="123.456.789-00"
                 margin="dense"
                 variant="outlined"
+                required
               />
             </DialogContent>
             <DialogActions>
@@ -321,6 +347,22 @@ const Perfil = () => {
               </Button>
             </DialogActions>
           </Dialog>
+
+          <Snackbar
+            open={notification.open}
+            autoHideDuration={6000}
+            onClose={handleCloseNotification}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          >
+            <Alert
+              elevation={6}
+              variant="filled"
+              onClose={handleCloseNotification}
+              severity={notification.severity}
+            >
+              {notification.message}
+            </Alert>
+          </Snackbar>
         </div>
       </Container>
     </div>
