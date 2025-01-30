@@ -128,7 +128,11 @@ const Login = () => {
           variant="filled"
           onClose={handleSnackbarClose}
           severity="success"
-          style={{ width: '100%' }}
+          style={{ 
+            maxWidth: 400, // Mesma largura máxima do container
+            margin: 'auto', // Centraliza horizontalmente
+            width: 'fit-content' // Ajusta à largura do conteúdo
+          }}
         >
           Login realizado com sucesso!
         </Alert>
