@@ -10,6 +10,7 @@ import {
   CardContent,
   Grid,
   Container,
+  Snackbar,
 } from "@material-ui/core";
 import {
   PlaceOutlined,
@@ -21,6 +22,7 @@ import {
   TimeToLeaveOutlined,
 } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
+import Alert from "@material-ui/lab/Alert";
 import evento1 from "../../assets/evento1.png";
 import evento2 from "../../assets/evento2.png";
 import evento3 from "../../assets/evento3.png";
@@ -117,13 +119,18 @@ const data = [
 const Eventos = () => {
   const classes = useStyles();
   const [value, setValue] = useState("");
-  const [favorites, setFavorites] = useState({}); // Inicialmente todas desmarcadas
+  const [favorites, setFavorites] = useState({});
   const [loading, setLoading] = useState(false);
+  const [notification, setNotification] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   const toggleFavorite = (index) => {
     setFavorites((prev) => ({
       ...prev,
-      [index]: !prev[index], // Alterna entre true e false
+      [index]: !prev[index],
     }));
   };
 
@@ -140,6 +147,24 @@ const Eventos = () => {
     if (year) formattedDate += "/" + year;
 
     setValue(formattedDate);
+  };
+
+  const handleSearch = () => {
+    setLoading(true);
+    
+    setTimeout(() => {
+      setLoading(false);
+      setNotification({
+        open: true,
+        message: "Eventos atualizados com sucesso!",
+        severity: "success",
+      });
+    }, 2000);
+  };
+
+  const handleCloseNotification = (event, reason) => {
+    if (reason === "clickaway") return;
+    setNotification({ ...notification, open: false });
   };
 
   return (
@@ -168,6 +193,7 @@ const Eventos = () => {
             variant="contained"
             color="primary"
             startIcon={<SearchOutlined />}
+            onClick={handleSearch}
           >
             Buscar
           </Button>
@@ -226,6 +252,22 @@ const Eventos = () => {
             ))}
           </Grid>
         )}
+
+        <Snackbar
+          open={notification.open}
+          autoHideDuration={6000}
+          onClose={handleCloseNotification}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert
+            elevation={6}
+            variant="filled"
+            onClose={handleCloseNotification}
+            severity={notification.severity}
+          >
+            {notification.message}
+          </Alert>
+        </Snackbar>
       </Container>
     </div>
   );
