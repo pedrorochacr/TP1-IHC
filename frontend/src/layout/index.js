@@ -51,6 +51,21 @@ const useStyles = makeStyles((theme) => ({
   alignProfileIcon: {
     justifyContent: "flex-end",
   },
+  activeIcon: {
+    color: `${theme.palette.secondary.main} !important`,
+    backgroundColor: theme.palette.primary.dark,
+    padding: theme.spacing(1),
+    borderRadius: '50%',
+    transform: 'scale(1.01)',
+    transition: 'all 1.5s ease',
+    '&:hover': {
+      transform: 'scale(1.01)'
+    }
+  },
+  defaultIcon: {
+    color: theme.palette.common.white,
+    transition: 'all 0.2s ease',
+  }
 }));
 
 const LoggedInLayout = ({ children }) => {
@@ -88,34 +103,34 @@ const LoggedInLayout = ({ children }) => {
       <AppBar position="fixed" color="primary" className={classes.bottomAppBar}>
         <Toolbar className={classes.bottomToolbar}>
           <IconButton
-            color={location.pathname === "/bem-vindo" ? "secondary" : "inherit"}
+            className={location.pathname === "/bem-vindo" ? classes.activeIcon : classes.defaultIcon}
             onClick={() => history.push("/bem-vindo")}
           >
-            <HomeIcon />
+            <HomeIcon fontSize={location.pathname === "/bem-vindo" ? "large" : "medium"} />
           </IconButton>
           <IconButton
-            color={location.pathname === "/locais" ? "secondary" : "inherit"}
+            className={location.pathname === "/locais" ? classes.activeIcon : classes.defaultIcon}
             onClick={() => history.push("/locais")}
           >
-            <LocationOnIcon />
+            <LocationOnIcon fontSize={location.pathname === "/locais" ? "large" : "medium"} />
           </IconButton>
           <IconButton
-            color={location.pathname === "/eventos" ? "secondary" : "inherit"}
+            className={location.pathname === "/eventos" ? classes.activeIcon : classes.defaultIcon}
             onClick={() => history.push("/eventos")}
           >
-            <DateRangeOutlined />
+            <DateRangeOutlined fontSize={location.pathname === "/eventos" ? "large" : "medium"} />
           </IconButton>
           <IconButton
-            color={location.pathname === "/estatistica" ? "secondary" : "inherit"}
+            className={location.pathname === "/estatistica" ? classes.activeIcon : classes.defaultIcon}
             onClick={() => history.push("/estatistica")}
           >
-            <EqualizerOutlined />
+            <EqualizerOutlined fontSize={location.pathname === "/estatistica" ? "large" : "medium"} />
           </IconButton>
           <IconButton
-            color={location.pathname === "/perfil" ? "secondary" : "inherit"}
+            className={location.pathname === "/perfil" ? classes.activeIcon : classes.defaultIcon}
             onClick={() => history.push("/perfil")}
           >
-            <PersonIcon />
+            <PersonIcon fontSize={location.pathname === "/perfil" ? "large" : "medium"} />
           </IconButton>
         </Toolbar>
       </AppBar>
