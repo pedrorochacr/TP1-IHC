@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     height: "100vh",
     backgroundColor: theme.palette.background.default,
-    padding: theme.spacing(3),
+    //padding: theme.spacing(3),
   },
   header: {
     width: "100%",

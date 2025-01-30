@@ -17,6 +17,8 @@ import {
   DialogContent,
   DialogActions,
   TextField,
+  Backdrop,
+  Snackbar,
 } from "@material-ui/core";
 import {
   PlaceOutlined,
@@ -27,12 +29,15 @@ import {
   Delete,
 } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
+import Alert from "@material-ui/lab/Alert";
+import evento1 from "../../assets/evento1.png";
+import evento2 from "../../assets/evento2.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.default,
     minHeight: "100vh",
-    padding: theme.spacing(4),
+    //padding: theme.spacing(4),
   },
   paper: {
     padding: theme.spacing(3),
@@ -70,6 +75,15 @@ const useStyles = makeStyles((theme) => ({
     padding: 0,
     marginTop: theme.spacing(2),
   },
+  dialogPaper: {
+    backgroundColor: "#fff",
+    borderRadius: "8px",
+    padding: theme.spacing(2),
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
+  },
+  backdrop: {
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+  },
 }));
 
 const Perfil = () => {
@@ -79,11 +93,16 @@ const Perfil = () => {
   const [logoutDialog, setLogoutDialog] = useState(false);
   const [deleteDialog, setDeleteDialog] = useState(false);
   const [cpf, setCpf] = useState("");
+  const [notification, setNotification] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   const events = [
     {
       title: "Limpeza do Mar",
-      image: "evento1.png",
+      image: evento1,
       ong: "Projeto Mar Sem Lixo",
       local: "Praia do Porto da Barra, Salvador",
       date: "05/02/2025",
@@ -91,7 +110,7 @@ const Perfil = () => {
     },
     {
       title: "Limpeza da Lagoa",
-      image: "evento2.png",
+      image: evento2,
       ong: "Beagá Limpa",
       local: "Lagoa da Pampulha, Belo Horizonte",
       date: "01/02/2025",
@@ -118,6 +137,52 @@ const Perfil = () => {
     },
   ];
 
+  const toggleEventsVisibility = () => {
+    setVisibleEvents((prev) => (prev === 1 ? events.length : 1));
+  };
+
+  const toggleReportsVisibility = () => {
+    setVisibleReports((prev) => (prev === 1 ? reports.length : 1));
+  };
+
+  const handleLogout = () => {
+    setLogoutDialog(false);
+    setNotification({
+      open: true,
+      message: "Logout realizado com sucesso!",
+      severity: "success",
+    });
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, 2000);
+  };
+
+  const handleDeleteAccount = () => {
+    if (!cpf.trim()) {
+      setNotification({
+        open: true,
+        message: "Por favor, digite um CPF válido!",
+        severity: "error",
+      });
+      return;
+    }
+    
+    setDeleteDialog(false);
+    setNotification({
+      open: true,
+      message: "Conta deletada com sucesso!",
+      severity: "success",
+    });
+    setTimeout(() => {
+      window.location.href = "/inicial";
+    }, 2000);
+  };
+
+  const handleCloseNotification = (event, reason) => {
+    if (reason === "clickaway") return;
+    setNotification({ ...notification, open: false });
+  };
+
   return (
     <div className={classes.root}>
       <Container maxWidth="md">
@@ -130,12 +195,13 @@ const Perfil = () => {
           <Typography variant="h6" gutterBottom>
             Eventos favoritados:
           </Typography>
-          {events.map((event, index) => (
+          {events.slice(0, visibleEvents).map((event, index) => (
             <Card key={index} className={classes.card}>
               <CardMedia
                 className={classes.cardMedia}
-                image={event.image}
-                title={event.title}
+                component="img"
+                src={event.image}
+                alt={event.title}
               />
               <CardContent className={classes.cardContent}>
                 <Typography variant="h6" gutterBottom>
@@ -162,11 +228,14 @@ const Perfil = () => {
               </CardContent>
             </Card>
           ))}
+          <Button onClick={toggleEventsVisibility}>
+            {visibleEvents === 1 ? "Mostrar mais eventos" : "Mostrar menos eventos"}
+          </Button>
 
           <Typography variant="h6" gutterBottom style={{ marginTop: 16 }}>
             Minhas denúncias:
           </Typography>
-          {reports.map((report, index) => (
+          {reports.slice(0, visibleReports).map((report, index) => (
             <Card key={index} className={classes.card}>
               <CardContent className={classes.cardContent}>
                 <Typography variant="h6" gutterBottom>
@@ -195,6 +264,105 @@ const Perfil = () => {
               </CardContent>
             </Card>
           ))}
+          <Button onClick={toggleReportsVisibility}>
+            {visibleReports === 1 ? "Mostrar mais denúncias" : "Mostrar menos denúncias"}
+          </Button>
+
+          <Grid container spacing={2} justifyContent="center" style={{ marginTop: 16 }}>
+            <Grid item>
+              <Button
+                variant="contained"
+                color="secondary"
+                startIcon={<ExitToApp />}
+                onClick={() => setLogoutDialog(true)}
+              >
+                Logout
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<Delete />}
+                onClick={() => setDeleteDialog(true)}
+              >
+                Deletar Conta
+              </Button>
+            </Grid>
+          </Grid>
+
+          <Dialog
+            open={logoutDialog}
+            onClose={() => setLogoutDialog(false)}
+            classes={{ paper: classes.dialogPaper }}
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              className: classes.backdrop,
+            }}
+          >
+            <DialogTitle>Confirmar Logout</DialogTitle>
+            <DialogContent>
+              <Typography>Tem certeza de que deseja sair?</Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setLogoutDialog(false)} color="secondary">
+                Cancelar
+              </Button>
+              <Button onClick={handleLogout} color="primary">
+                Confirmar
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          <Dialog
+            open={deleteDialog}
+            onClose={() => setDeleteDialog(false)}
+            classes={{ paper: classes.dialogPaper }}
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              className: classes.backdrop,
+            }}
+          >
+            <DialogTitle>Deletar Conta</DialogTitle>
+            <DialogContent>
+              <Typography gutterBottom>
+                Digite seu CPF para confirmar:
+              </Typography>
+              <TextField
+                fullWidth
+                value={cpf}
+                onChange={(e) => setCpf(e.target.value)}
+                placeholder="123.456.789-00"
+                margin="dense"
+                variant="outlined"
+                required
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setDeleteDialog(false)} color="secondary">
+                Cancelar
+              </Button>
+              <Button onClick={handleDeleteAccount} color="primary">
+                Confirmar
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          <Snackbar
+            open={notification.open}
+            autoHideDuration={6000}
+            onClose={handleCloseNotification}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          >
+            <Alert
+              elevation={6}
+              variant="filled"
+              onClose={handleCloseNotification}
+              severity={notification.severity}
+            >
+              {notification.message}
+            </Alert>
+          </Snackbar>
         </div>
       </Container>
     </div>

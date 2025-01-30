@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: theme.spacing(4),
+    //padding: theme.spacing(4),
     marginTop: theme.spacing(8),
     backgroundColor: "#f9f9f9",
     borderRadius: "8px",
