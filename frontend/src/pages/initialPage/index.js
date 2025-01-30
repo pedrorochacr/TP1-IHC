@@ -1,191 +1,96 @@
-import React, { useState, useContext } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import React from "react";
 import {
-    Button,
-    CssBaseline,
-    TextField,
-    Grid,
-    Typography,
-    Container,
-    InputAdornment,
-    IconButton,
-    Link,
-    CircularProgress
-} from '@material-ui/core';
-
-
+  Typography,
+  Grid,
+  Container,
+  CssBaseline,
+  Button,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
-import useAuth from "../../hooks/useAuth.js";
-import { i18n } from "../../translate/i18n";
-import logoTarget from "../../assets/logoLogin.png";
-import { AuthContext } from "../../context/Auth/AuthContext.js";
-import BackdropLoading from "../../components/BackdropLoading/index.js";
-import MainHeader from "../../components/MainHeader/index.js";
-import Title from "../../components/Title/index.js";
-import MainHeaderButtonsWrapper from "../../components/MainHeaderButtonsWrapper/index.js";
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min.js";
-
-
+import { Person, PersonAdd } from "@material-ui/icons";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
-
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
+  root: {
+    backgroundColor: theme.palette.background.default,
+    minHeight: "100vh",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: theme.spacing(4),
+  },
+  paper: {
+    textAlign: "center",
+    padding: theme.spacing(4),
+    borderRadius: "12px",
+    backgroundColor: "#fff",
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+  },
+  title: {
+    fontWeight: 700,
+    color: theme.palette.primary.main,
+    marginBottom: theme.spacing(2),
+  },
+  subtitle: {
+    fontSize: "16px",
+    color: theme.palette.text.secondary,
+    marginBottom: theme.spacing(4),
+  },
+  button: {
+    width: "100%",
+    padding: theme.spacing(1.5),
+    fontWeight: "bold",
+    borderRadius: "30px",
+    marginTop: theme.spacing(2),
+    textTransform: "none",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: theme.spacing(1),
+    "&:hover": {
+      backgroundColor: theme.palette.primary.dark,
     },
-    whatsapp: {
-        backgroundColor: '#32d951'
-    },
-    field: {
-        background: theme.palette.fieldBackground,
-        borderRadius: 109,
-        height: 30,
-        border: 'none'
-
-    },
-    form: {
-        width: "100%", // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-    },
-    paper: {
-        marginTop: theme.spacing(8),
-        display: "flex",
-        flexDirection: "column",
-
-        padding: theme.spacing(2),
-        borderRadius: theme.spacing(2),
-        borderColor: "#ffffff",
-
-        //backgroundColor: `rgba(${theme.palette.background.paper}, 0.8)`,
-
-
-    },
-    submit: {
-        padding: 10,
-        borderRadius: 109,
-        margin: theme.spacing(0, 0, 2),
-    },
-    containerWrapper: {
-        display: "flex",
-
-        justifyContent: "space-between",
-        gap: theme.spacing(4),
-    },
-    container: {
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-    },
-    root: {
-        background: theme.palette.background,
-    },
-    mobileContainer: {
-        flex: 1,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-
-    },
-    hideOnMobile: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        [theme.breakpoints.down('sm')]: {
-            display: 'none',
-        },
-    },
+  },
 }));
 
-
-
-
 const InitialPage = () => {
-    const classes = useStyles();
-    const history = useHistory();
+  const classes = useStyles();
+  const history = useHistory();
 
-    const { handleLogin, loading } = useContext(AuthContext);
-
-
-
-    return (
-        //<div style={{ display: 'flex', 
-        //flexDirection: 'column', 
-        //minHeight: '100vh', 
-        // backgroundImage: `url(${loginBackground})`,
-        //backgroundSize: 'cover',
-        //backgroundRepeat: 'no-repeat',
-        //backgroundPosition: 'center'
-        //}}>
-        <div className={classes.root}>
-            <Container component="main" maxWidth="md">
-
-
-                <CssBaseline />
-                <div className={classes.containerWrapper}>
-                    <Container component="div" maxWidth="xs" className={classes.mobileContainer}>
-                        <div className={classes.paper}>
-
-                            <Grid
-                                container
-                                direction="column"
-                                justifyContent="center"
-                                alignItems="center"
-                                style={{ textAlign: 'center', marginBottom:60 }} // Centraliza verticalmente e ajusta o texto
-                            >
-                                {/* Título menor */}
-                                <Typography variant="h4" style={{ marginBottom: 30 }}>
-                                    LixoSmart
-                                </Typography>
-
-                                {/* Texto com largura máxima */}
-                                <Typography
-                                    variant="subtitle1"
-                                    style={{
-                                        fontSize:15, // Limita a largura do texto a 80% da tela
-                                        
-                                    }}
-                                >
-                                    "Transformando o descarte de resíduos em ações inteligentes para um planeta mais limpo"
-                                </Typography>
-                            </Grid>
-
-                            <Button
-                              
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}
-                                onClick={()=>history.push('/login')}
-                            >
-                                {loading ?
-                                    (
-                                        <CircularProgress color="secondary" size={20} />
-                                    ) :
-                                    ('Login')
-                                }
-
-                            </Button>
-                            <Button
-                              
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}
-                                onClick={()=>history.push('/cadastro')}
-                                
-                            >
-                                Cadastro
-
-                            </Button>
-                        </div>
-                    </Container>
-                </div>
-            </Container>
+  return (
+    <div className={classes.root}>
+      <Container maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Typography variant="h4" className={classes.title}>
+            LixoSmart
+          </Typography>
+          <Typography variant="subtitle1" className={classes.subtitle}>
+            "Transformando o descarte de resíduos em ações inteligentes para um
+            planeta mais limpo"
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={() => history.push("/login")}
+          >
+            <Person />
+            Login
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={() => history.push("/cadastro")}
+          >
+            <PersonAdd />
+            Cadastro
+          </Button>
         </div>
-    );
+      </Container>
+    </div>
+  );
 };
 
-export default InitialPage; 
+export default InitialPage;
