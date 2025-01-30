@@ -3,6 +3,7 @@ import {
   Button,
   TextField,
   Typography,
+  Container,
   Snackbar,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -22,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 400,
     padding: theme.spacing(3),
     borderRadius: theme.spacing(2),
-    backgroundColor: "#fff", // Altere para branco
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", // Sombra para contraste
+    backgroundColor: "#fff", // Fundo branco
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", // Contraste adicional
   },
   field: {
     width: "100%",
@@ -38,33 +39,33 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 20,
     marginTop: theme.spacing(2),
   },
-  forgotPassword: {
-    textAlign: "right",
-    marginTop: theme.spacing(1),
-    "& a": {
-      textDecoration: "none",
-      color: theme.palette.primary.main,
-      fontWeight: 500,
-    },
+  backButton: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: theme.spacing(2),
+    cursor: "pointer",
+    color: theme.palette.primary.main,
   },
 }));
 
-const Login = () => {
+const ForgotPassword = () => {
   const classes = useStyles();
   const history = useHistory();
+  const [input, setInput] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+  const handleInputChange = (e) => {
+    setInput(e.target.value);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Exibe o Snackbar
     setSnackbarOpen(true);
-
-    // Aguarda 2 segundos e redireciona
     setTimeout(() => {
-      setSnackbarOpen(false); // Fecha o Snackbar
-      history.push("/bem-vindo"); // Redireciona para a página "Bem-Vindo"
-    }, 2000);
+      setSnackbarOpen(false);
+      history.push("/login"); // Redireciona para a página de login
+    }, 3000); // Tempo para exibir o Snackbar antes do redirecionamento
+    setInput(""); // Limpa o campo
   };
 
   const handleSnackbarClose = () => {
@@ -75,46 +76,34 @@ const Login = () => {
     <div className={classes.root}>
       <div className={classes.container}>
         <div
-          style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
-          onClick={() => history.push("/")}
+          className={classes.backButton}
+          onClick={() => history.push("/login")}
         >
           <ArrowBackIosIcon fontSize="small" />
           <Typography variant="body2">Voltar</Typography>
         </div>
         <Typography variant="h5" align="center" gutterBottom>
-          Login
+          Esqueci minha senha
+        </Typography>
+        <Typography variant="body2" align="center" gutterBottom>
+          Insira seu e-mail ou CPF para recuperar sua senha.
         </Typography>
         <form onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
-            label="Usuário"
-            name="email"
+            label="E-mail ou CPF"
+            value={input}
+            onChange={handleInputChange}
             className={classes.field}
-            placeholder="Opcional"
+            required
           />
-          <TextField
-            variant="outlined"
-            label="Senha"
-            type="password"
-            name="password"
-            className={classes.field}
-            placeholder="Opcional"
-          />
-          <div className={classes.forgotPassword}>
-            <Typography
-              style={{ cursor: "pointer" }}
-              onClick={() => history.push("/esqueci-minha-senha")}
-            >
-              Esqueci minha senha
-            </Typography>
-          </div>
           <Button
             type="submit"
             variant="contained"
             color="primary"
             className={classes.submit}
           >
-            Entrar
+            Recuperar senha
           </Button>
         </form>
       </div>
@@ -133,11 +122,12 @@ const Login = () => {
       fontWeight: "bold",
     }}
   >
-    Login realizado com sucesso!
+    Instruções para recuperação de senha enviadas!
   </div>
 </Snackbar>
+
     </div>
   );
 };
 
-export default Login;
+export default ForgotPassword;

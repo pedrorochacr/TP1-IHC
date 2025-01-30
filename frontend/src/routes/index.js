@@ -14,6 +14,7 @@ import Eventos from "../pages/eventos";
 import Estatistica from "../pages/estatistica";
 import Perfil from "../pages/perfil";
 import Denuncias from "../pages/denuncias";
+import ForgotPassword from "../pages/esqueci-minha-senha/ForgotPassword";
 
 const Routes = () => {
   return (
@@ -23,6 +24,7 @@ const Routes = () => {
           <Route exact path={"/inicial"} component={InitialPage} />
           <Route exact path={"/login"} component={Login} />
           <Route exact path={"/cadastro"} component={Registration} />
+          <Route exact path={"/esqueci-minha-senha"} component={ForgotPassword} />
           <LoggedInLayout>
             <Route exact path={"/bem-vindo"} component={Dashboard} />
             <Route exact path={"/locais"} component={Locais} />
