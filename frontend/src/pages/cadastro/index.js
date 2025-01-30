@@ -11,12 +11,14 @@ import {
   IconButton,
   CircularProgress,
   Card,
-  CardContent
+  CardContent,
+  Snackbar,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { AuthContext } from "../../context/Auth/AuthContext.js";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -65,6 +67,11 @@ const Registration = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [notification, setNotification] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
   const { handleLogin } = useContext(AuthContext);
 
   const handleChangeInput = (e) => {
@@ -74,11 +81,26 @@ const Registration = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
+    // Simula o processamento do cadastro
     setTimeout(() => {
-      handleLogin(user);
       setLoading(false);
+      setNotification({
+        open: true,
+        message: "Cadastro realizado com sucesso!",
+        severity: "success",
+      });
+
+      // Redireciona para a página de login após 2 segundos
+      setTimeout(() => {
+        history.push("/login");
+      }, 2000);
     }, 1500);
+  };
+
+  const handleCloseNotification = (event, reason) => {
+    if (reason === "clickaway") return;
+    setNotification({ ...notification, open: false });
   };
 
   return (
@@ -162,6 +184,22 @@ const Registration = () => {
           </form>
         </CardContent>
       </Card>
+
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={6000}
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          elevation={6}
+          variant="filled"
+          onClose={handleCloseNotification}
+          severity={notification.severity}
+        >
+          {notification.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
