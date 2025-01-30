@@ -42,8 +42,6 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "12px",
     backgroundColor: "#fff",
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-    position: "relative",
-    zIndex: 1,
   },
   header: {
     textAlign: "center",
@@ -82,8 +80,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
   },
   backdrop: {
-    backgroundColor: "rgba(0, 0, 0, 0.6) !important",
-    zIndex: theme.zIndex.modal - 1,
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
   },
 }));
 
@@ -165,6 +162,7 @@ const Perfil = () => {
             Olá, Glívia
           </Typography>
 
+          {/* Seção de Eventos */}
           <Typography variant="h6" gutterBottom>
             Eventos favoritados:
           </Typography>
@@ -205,6 +203,7 @@ const Perfil = () => {
             {visibleEvents === 1 ? 'Mostrar mais eventos' : 'Mostrar menos eventos'}
           </Button>
 
+          {/* Seção de Denúncias */}
           <Typography variant="h6" gutterBottom style={{ marginTop: 16 }}>
             Minhas denúncias:
           </Typography>
@@ -241,6 +240,7 @@ const Perfil = () => {
             {visibleReports === 1 ? 'Mostrar mais denúncias' : 'Mostrar menos denúncias'}
           </Button>
 
+          {/* Botões de Ação */}
           <Grid container spacing={2} justifyContent="center" style={{ marginTop: 16 }}>
             <Grid item>
               <Button
@@ -264,7 +264,7 @@ const Perfil = () => {
             </Grid>
           </Grid>
 
-          {/* Dialog para Logout */}
+          {/* Dialog de Logout */}
           <Dialog
             open={logoutDialog}
             onClose={() => setLogoutDialog(false)}
@@ -288,7 +288,7 @@ const Perfil = () => {
             </DialogActions>
           </Dialog>
 
-          {/* Dialog para Deletar Conta */}
+          {/* Dialog de Deletar Conta */}
           <Dialog
             open={deleteDialog}
             onClose={() => setDeleteDialog(false)}
