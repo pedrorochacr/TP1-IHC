@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   header: {
     textAlign: "center",
     marginBottom: theme.spacing(4),
-    marginTop: theme.spacing(2), // Adiciona espaçamento abaixo da barra roxa
+    marginTop: theme.spacing(6),
   },
   filterContainer: {
     marginBottom: theme.spacing(4),
