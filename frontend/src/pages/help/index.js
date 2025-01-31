@@ -20,7 +20,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    // Usando a cor de fundo padrão do tema (ou qualquer outra se desejar).
     backgroundColor: theme.palette.background.default,
     minHeight: "100vh",
     padding: theme.spacing(4, 0),
@@ -32,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(4),
     color: theme.palette.primary.main,
   },
-  // Envolvemos a parte do FAQ em um "wrapper" branco
   faqWrapper: {
     backgroundColor: "#fff",
     borderRadius: "12px",
@@ -46,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
   },
   botButton: {
     position: "fixed",
-    // Para subir mais o ícone do bot, aumente a distância do bottom
     bottom: theme.spacing(8),
     right: theme.spacing(4),
     backgroundColor: theme.palette.primary.main,
@@ -59,12 +56,15 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.primary.dark,
     },
   },
+  // Tornamos toda a área do bot mais clara, incluindo título e conteúdo
   chatDialog: {
     position: "fixed",
     bottom: theme.spacing(10),
     right: theme.spacing(2),
     width: "300px",
     borderRadius: "12px",
+    zIndex: 9999,
+    backgroundColor: "#fafafa", // Fundo mais claro de toda a janelinha
   },
   chatContainer: {
     display: "flex",
@@ -79,6 +79,10 @@ const useStyles = makeStyles((theme) => ({
   },
   chatInput: {
     flexGrow: 1,
+  },
+  // Classe para o Backdrop (caso queira mexer na cor ou opacidade)
+  customBackdrop: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
 }));
 
@@ -102,7 +106,10 @@ const HelpPage = () => {
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
-        { sender: "bot", text: "Ainda estou aprendendo. Mas logo poderei ajudar mais!" },
+        {
+          sender: "bot",
+          text: "Ainda estou aprendendo. Mas logo poderei ajudar mais!",
+        },
       ]);
     }, 1000);
   };
@@ -115,7 +122,6 @@ const HelpPage = () => {
           Central de Ajuda
         </Typography>
 
-        {/* Container branco específico para o FAQ */}
         <div className={classes.faqWrapper}>
           <div className={classes.faqContainer}>
             <Accordion>
@@ -145,16 +151,19 @@ const HelpPage = () => {
         </div>
       </Container>
 
-      {/* Botão do Bot de Ajuda */}
       <IconButton className={classes.botButton} onClick={handleChatToggle}>
         <ChatOutlined fontSize="large" />
       </IconButton>
 
-      {/* Chat do Bot */}
       <Dialog
         open={chatOpen}
         onClose={handleChatToggle}
         classes={{ paper: classes.chatDialog }}
+        BackdropProps={{
+          classes: {
+            root: classes.customBackdrop,
+          },
+        }}
       >
         <DialogTitle>Bot de Ajuda</DialogTitle>
         <DialogContent className={classes.chatContainer}>
@@ -171,7 +180,6 @@ const HelpPage = () => {
               </CardContent>
             </Card>
           ))}
-
           <div className={classes.chatInputContainer}>
             <TextField
               variant="outlined"
