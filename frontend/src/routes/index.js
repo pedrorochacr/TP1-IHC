@@ -15,6 +15,7 @@ import Estatistica from "../pages/estatistica";
 import Perfil from "../pages/perfil";
 import Denuncias from "../pages/denuncias";
 import ForgotPassword from "../pages/esqueci-minha-senha/ForgotPassword";
+import HelpPage from "../pages/help";
 
 const Routes = () => {
   return (
@@ -32,6 +33,7 @@ const Routes = () => {
             <Route exact path={"/estatistica"} component={Estatistica} />
             <Route exact path={"/perfil"} component={Perfil}  />
             <Route exact path={"/denuncias"} component={Denuncias} />
+            <Route exact path={"/help"} component={HelpPage} />
           </LoggedInLayout>
         </Switch>
         <ToastContainer autoClose={3000} />

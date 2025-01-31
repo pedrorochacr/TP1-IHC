@@ -183,16 +183,13 @@ const LoggedInLayout = ({ children }) => {
               open={menuOpen}
               onClose={handleCloseMenu}
             >
-              <MenuItem
-                onClick={() => history.push("/perfil")}
-                style={{ backgroundColor: "white" }}
-              >
+              <MenuItem onClick={() => history.push("/perfil")} style={{ backgroundColor: "white" }}>
                 Perfil
               </MenuItem>
-              <MenuItem
-                onClick={handleLogout}
-                style={{ backgroundColor: "white" }}
-              >
+              <MenuItem onClick={() => history.push("/help")} style={{ backgroundColor: "white" }}>
+                Ajuda
+              </MenuItem>
+              <MenuItem onClick={handleLogout} style={{ backgroundColor: "white" }}>
                 Logout
               </MenuItem>
             </Menu>
@@ -205,54 +202,13 @@ const LoggedInLayout = ({ children }) => {
         {children ? children : null}
       </main>
 
-      <AppBar position="fixed" color="primary" className={classes.bottomAppBar}>
-        <Toolbar className={classes.bottomToolbar}>
-          <IconButton
-            className={location.pathname === "/bem-vindo" ? classes.activeIcon : classes.defaultIcon}
-            onClick={() => history.push("/bem-vindo")}
-          >
-            <HomeIcon fontSize={location.pathname === "/bem-vindo" ? "large" : "medium"} />
-          </IconButton>
-          <IconButton
-            className={location.pathname === "/locais" ? classes.activeIcon : classes.defaultIcon}
-            onClick={() => history.push("/locais")}
-          >
-            <LocationOnIcon fontSize={location.pathname === "/locais" ? "large" : "medium"} />
-          </IconButton>
-          <IconButton
-            className={location.pathname === "/eventos" ? classes.activeIcon : classes.defaultIcon}
-            onClick={() => history.push("/eventos")}
-          >
-            <DateRangeOutlined fontSize={location.pathname === "/eventos" ? "large" : "medium"} />
-          </IconButton>
-          <IconButton
-            className={location.pathname === "/estatistica" ? classes.activeIcon : classes.defaultIcon}
-            onClick={() => history.push("/estatistica")}
-          >
-            <EqualizerOutlined fontSize={location.pathname === "/estatistica" ? "large" : "medium"} />
-          </IconButton>
-          <IconButton
-            className={location.pathname === "/perfil" ? classes.activeIcon : classes.defaultIcon}
-            onClick={() => history.push("/perfil")}
-          >
-            <PersonIcon fontSize={location.pathname === "/perfil" ? "large" : "medium"} />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-
-      {/* Notificação de Logout */}
       <Snackbar
         open={notification.open}
         autoHideDuration={4000}
         onClose={handleCloseNotification}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert
-          elevation={6}
-          variant="filled"
-          onClose={handleCloseNotification}
-          severity={notification.severity}
-        >
+        <Alert elevation={6} variant="filled" onClose={handleCloseNotification} severity={notification.severity}>
           {notification.message}
         </Alert>
       </Snackbar>
