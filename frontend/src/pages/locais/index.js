@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     fontWeight: 700,
     marginBottom: theme.spacing(4),
-    marginTop: theme.spacing(8),
+    //marginTop: theme.spacing(8),
     color: theme.palette.primary.main,
   },
   filterContainer: {
