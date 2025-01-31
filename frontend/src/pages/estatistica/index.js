@@ -13,21 +13,24 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Backdrop,
   Card,
   Divider,
   Box,
+  IconButton,
+  InputAdornment,
 } from "@material-ui/core";
-import { 
+import {
   SearchOutlined,
   DateRangeOutlined,
-  WarningOutlined 
+  WarningOutlined,
+  MicOutlined,
 } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import Alert from "@material-ui/lab/Alert";
 import denuncia from "../../assets/denuncia.jpeg";
-import { useTheme } from '@material-ui/core/styles';
+import { useTheme } from "@material-ui/core/styles";
 
+// Função para obter os últimos 6 meses (para o gráfico).
 const getLast6Months = () => {
   const months = [];
   const now = new Date();
@@ -40,67 +43,68 @@ const getLast6Months = () => {
   return months;
 };
 
+// Opções do gráfico ApexCharts.
 const chartOptions = {
   chart: {
     id: "dynamic-bar",
     toolbar: { show: false },
-    foreColor: '#373d3f'
+    foreColor: "#373d3f",
   },
   xaxis: {
     categories: getLast6Months(),
-    labels: { style: { fontSize: '14px' } }
+    labels: { style: { fontSize: "14px" } },
   },
   yaxis: {
-    labels: { style: { fontSize: '14px' } }
+    labels: { style: { fontSize: "14px" } },
   },
   plotOptions: {
     bar: {
       borderRadius: 8,
-      columnWidth: '60%',
-    }
+      columnWidth: "60%",
+    },
   },
   dataLabels: { enabled: false },
-  colors: ['#2E7D32'],
+  colors: ["#2E7D32"],
   title: {
     text: "Últimos 6 Meses",
     align: "center",
-    style: { fontSize: "18px", fontWeight: 600 }
+    style: { fontSize: "18px", fontWeight: 600 },
   },
   grid: {
-    borderColor: '#f1f3f4',
-    strokeDashArray: 5
-  }
+    borderColor: "#f1f3f4",
+    strokeDashArray: 5,
+  },
 };
 
+// Dados do gráfico.
 const chartSeries = [
   {
     name: "Denúncias",
     data: [12, 19, 10, 15, 22, 13],
-  }
+  },
 ];
 
+// Estilos (Material-UI).
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.default,
     minHeight: "100vh",
-    //padding: theme.spacing(4),
-    //marginTop: theme.spacing(8),
-    marginBottom: theme.spacing(8)
+    marginBottom: theme.spacing(8),
   },
   header: {
     textAlign: "center",
     marginBottom: theme.spacing(4),
     fontWeight: 700,
-    color: theme.palette.primary.main
+    color: theme.palette.primary.main,
   },
   filterContainer: {
     marginBottom: theme.spacing(4),
     display: "flex",
     justifyContent: "center",
+    alignItems: "center",
     gap: theme.spacing(2),
     [theme.breakpoints.down("sm")]: {
       flexDirection: "column",
-      alignItems: "center",
     },
   },
   inputField: {
@@ -115,8 +119,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1.5, 4),
     fontWeight: 600,
     borderRadius: "8px",
-    textTransform: 'none',
-    fontSize: '16px'
+    textTransform: "none",
+    fontSize: "16px",
   },
   sectionCard: {
     backgroundColor: "#fff",
@@ -136,7 +140,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     gap: theme.spacing(2),
-    fontSize: '20px'
+    fontSize: "20px",
   },
   mapContainer: {
     borderRadius: "12px",
@@ -171,29 +175,24 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
     },
   },
-  categorySelector: {
-    backgroundColor: "#fff",
-    borderRadius: "8px",
-    "& .MuiOutlinedInput-root": {
-      borderRadius: "8px",
-    },
-  },
   divider: {
     margin: theme.spacing(4, 0),
     backgroundColor: theme.palette.divider,
-    height: 2
+    height: 2,
   },
   loadingContainer: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    minHeight: "300px",
+    minHeight: "200px", // Ajuste conforme necessário
   },
+  // Classes para o menu (inspiradas no "Locais").
   menuPaper: {
     backgroundColor: "#fff",
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
     "& .MuiMenuItem-root": {
-      padding: theme.spacing(1.5, 2),
+      backgroundColor: "#fff !important",
+      color: "#333 !important",
       "&:hover": {
         backgroundColor: "#f5f5f5 !important",
       },
@@ -203,8 +202,12 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "rgba(0, 0, 0, 0.5) !important",
     zIndex: 9998,
   },
+  categorySelector: {
+    // Estilos adicionais, se desejar.
+  },
 }));
 
+// Componente principal.
 const Estatistica = () => {
   const classes = useStyles();
   const [localizacao, setLocalizacao] = useState("");
@@ -217,18 +220,34 @@ const Estatistica = () => {
   });
   const theme = useTheme();
 
+  // Configurações do Menu do Material-UI (para o Select).
   const menuProps = {
-    classes: { paper: classes.menuPaper },
-    BackdropProps: { className: classes.menuBackdrop },
-    anchorOrigin: { vertical: "bottom", horizontal: "left" },
-    transformOrigin: { vertical: "top", horizontal: "left" },
+    classes: {
+      paper: classes.menuPaper,
+    },
+    BackdropProps: {
+      className: classes.menuBackdrop,
+    },
+    anchorOrigin: {
+      vertical: "bottom",
+      horizontal: "left",
+    },
+    transformOrigin: {
+      vertical: "top",
+      horizontal: "left",
+    },
     getContentAnchorEl: null,
     disableAutoFocusItem: true,
     disablePortal: true,
     transitionDuration: 0,
-    MenuListProps: { style: { padding: 0 } },
+    MenuListProps: {
+      style: {
+        padding: 0,
+      },
+    },
   };
 
+  // Ação do botão "Buscar Dados".
   const handleSearch = () => {
     if (!localizacao) {
       setNotification({
@@ -238,8 +257,11 @@ const Estatistica = () => {
       });
       return;
     }
-    
+
+    // Ativa o estado de carregamento.
     setLoading(true);
+
+    // Simula requisição (2s).
     setTimeout(() => {
       setLoading(false);
       setNotification({
@@ -250,16 +272,16 @@ const Estatistica = () => {
     }, 2000);
   };
 
-  const handleCloseNotification = (event, reason) => {
-    if (reason === "clickaway") return;
-    setNotification({ ...notification, open: false });
+  // Botão de microfone (exemplo).
+  const handleMicClick = () => {
+    alert("Função de microfone em desenvolvimento.");
   };
 
   return (
     <div className={classes.root}>
       <Container maxWidth="lg">
         <CssBaseline />
-        
+
         <Typography variant="h3" className={classes.header}>
           Estatísticas
         </Typography>
@@ -273,6 +295,18 @@ const Estatistica = () => {
             onChange={(e) => setLocalizacao(e.target.value)}
             className={classes.inputField}
             placeholder="Ex: Centro, São Paulo"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={handleMicClick}
+                    aria-label="Microfone para acessibilidade"
+                  >
+                    <MicOutlined />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           <Button
             variant="contained"
@@ -293,18 +327,14 @@ const Estatistica = () => {
           </Typography>
           {loading ? (
             <div className={classes.loadingContainer}>
-              <CircularProgress size={48} color="primary" />
+              <CircularProgress size={32} />
             </div>
           ) : (
             <div className={classes.mapContainer}>
-              <img 
-                src={denuncia} 
-                alt="Mapa de calor de denúncias" 
-                style={{ 
-                  width: "100%",
-                  border: `1px solid ${theme.palette.divider}`,
-                  borderRadius: "12px"
-                }} 
+              <img
+                src={denuncia}
+                alt="Mapa de calor de denúncias"
+                style={{ width: "100%", borderRadius: "12px" }}
               />
             </div>
           )}
@@ -318,14 +348,20 @@ const Estatistica = () => {
             <DateRangeOutlined fontSize="inherit" />
             Distribuição Temporal de Ocorrências
           </Typography>
-          <div className={classes.chartContainer}>
-            <ReactApexChart 
-              options={chartOptions} 
-              series={chartSeries} 
-              type="bar" 
-              height={350} 
-            />
-          </div>
+          {loading ? (
+            <div className={classes.loadingContainer}>
+              <CircularProgress size={32} />
+            </div>
+          ) : (
+            <div className={classes.chartContainer}>
+              <ReactApexChart
+                options={chartOptions}
+                series={chartSeries}
+                type="bar"
+                height={350}
+              />
+            </div>
+          )}
         </Card>
 
         <Divider className={classes.divider} />
@@ -336,67 +372,77 @@ const Estatistica = () => {
             <WarningOutlined fontSize="inherit" />
             Áreas Críticas de Acúmulo de Resíduos
           </Typography>
-          
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={6}>
-              <FormControl variant="outlined" fullWidth className={classes.categorySelector}>
-                <InputLabel>Categoria de Resíduo</InputLabel>
-                <Select
-                  value={categoria}
-                  onChange={(e) => setCategoria(e.target.value)}
-                  label="Categoria"
-                  MenuProps={menuProps}
-                >
-                  <MenuItem value="">
-                    <em>Selecione uma categoria</em>
-                  </MenuItem>
-                  <MenuItem value="residuos-toxicos">Resíduos Tóxicos</MenuItem>
-                  <MenuItem value="plastico">Plástico</MenuItem>
-                  <MenuItem value="papel">Papel</MenuItem>
-                  <MenuItem value="metal">Metal</MenuItem>
-                  <MenuItem value="vidro">Vidro</MenuItem>
-                  <MenuItem value="eletronicos">Eletrônicos</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
 
-            <Grid item xs={12} md={6}>
-              <Box className={classes.riskSection}>
-                <Typography variant="h6" gutterBottom color="textSecondary">
-                  Ranking de Locais Críticos:
-                </Typography>
-                {[
-                  { name: "Lagoa da Pampulha", count: 152 },
-                  { name: "Mercado Central", count: 128 },
-                  { name: "Praça da Liberdade", count: 115 }
-                ].map((item, index) => (
-                  <Card key={index} className={classes.locationItem}>
-                    <Typography variant="body1">
-                      {index + 1}. {item.name}
-                      <Box component="span" display="block" color="textSecondary" mt={0.5}>
-                        {item.count} ocorrências registradas
-                      </Box>
-                    </Typography>
-                  </Card>
-                ))}
-              </Box>
+          {loading ? (
+            <div className={classes.loadingContainer}>
+              <CircularProgress size={32} />
+            </div>
+          ) : (
+            <Grid container spacing={4}>
+              <Grid item xs={12} md={6}>
+                <FormControl
+                  variant="outlined"
+                  fullWidth
+                  className={classes.categorySelector}
+                >
+                  <InputLabel>Categoria de Resíduo</InputLabel>
+                  <Select
+                    value={categoria}
+                    onChange={(e) => setCategoria(e.target.value)}
+                    label="Categoria"
+                    MenuProps={menuProps}
+                  >
+                    <MenuItem value="">
+                      <em>Selecione uma categoria</em>
+                    </MenuItem>
+                    <MenuItem value="residuos-toxicos">Resíduos Tóxicos</MenuItem>
+                    <MenuItem value="plastico">Plástico</MenuItem>
+                    <MenuItem value="papel">Papel</MenuItem>
+                    <MenuItem value="metal">Metal</MenuItem>
+                    <MenuItem value="vidro">Vidro</MenuItem>
+                    <MenuItem value="eletronicos">Eletrônicos</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <Box className={classes.riskSection}>
+                  <Typography variant="h6" gutterBottom color="textSecondary">
+                    Ranking de Locais Críticos:
+                  </Typography>
+                  {[
+                    { name: "Lagoa da Pampulha", count: 152 },
+                    { name: "Mercado Central", count: 128 },
+                    { name: "Praça da Liberdade", count: 115 },
+                  ].map((item, index) => (
+                    <Card key={index} className={classes.locationItem}>
+                      <Typography variant="body1">
+                        {index + 1}. {item.name}
+                        <Box
+                          component="span"
+                          display="block"
+                          color="textSecondary"
+                          mt={0.5}
+                        >
+                          {item.count} ocorrências registradas
+                        </Box>
+                      </Typography>
+                    </Card>
+                  ))}
+                </Box>
+              </Grid>
             </Grid>
-          </Grid>
+          )}
         </Card>
 
+        {/* Notificação (Snackbar) */}
         <Snackbar
           open={notification.open}
           autoHideDuration={6000}
-          onClose={handleCloseNotification}
+          onClose={() => setNotification({ ...notification, open: false })}
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
-          <Alert
-            elevation={6}
-            variant="filled"
-            onClose={handleCloseNotification}
-            severity={notification.severity}
-            style={{ borderRadius: '8px' }}
-          >
+          <Alert variant="filled" severity={notification.severity}>
             {notification.message}
           </Alert>
         </Snackbar>

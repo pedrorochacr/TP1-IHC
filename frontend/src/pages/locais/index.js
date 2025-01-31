@@ -22,16 +22,14 @@ const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.default,
     minHeight: "100vh",
-    //padding: theme.spacing(4),
-    //marginTop: theme.spacing(0),
     marginBottom: theme.spacing(5),
   },
   header: {
     textAlign: "center",
-    fontWeight: 700, // Alinhado com o padrão
+    fontWeight: 700,
     marginBottom: theme.spacing(4),
-    marginTop: theme.spacing(8), // Alinhado com o padrão
-    color: theme.palette.primary.main, // Alinhado com o padrão
+    marginTop: theme.spacing(8),
+    color: theme.palette.primary.main,
   },
   filterContainer: {
     marginBottom: theme.spacing(4),
@@ -196,7 +194,11 @@ const Locais = () => {
           </div>
         ) : (
           <div className={classes.mapContainer}>
-            <img src={mapa} alt="Mapa de locais de descarte" style={{ width: "100%" }} />
+            <img
+              src={mapa}
+              alt="Mapa de locais de descarte"
+              style={{ width: "100%" }}
+            />
           </div>
         )}
 
