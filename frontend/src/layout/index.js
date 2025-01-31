@@ -1,6 +1,5 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import React, { useState, useContext, useEffect } from "react";
-import { useHistory } from "react-router-dom";
 import {
   makeStyles,
   AppBar,
@@ -10,7 +9,9 @@ import {
   Typography,
   MenuItem,
   Menu,
+  Snackbar,
 } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 import clsx from "clsx";
 import { AuthContext } from "../context/Auth/AuthContext";
 import HomeIcon from "@material-ui/icons/Home";
@@ -44,13 +45,13 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbar: {
     display: "flex",
-    justifyContent: "space-between", // Alinha logo e ícones nos extremos
+    justifyContent: "space-between",
     paddingRight: 24,
     color: "white",
   },
   logo: {
-    height: "40px", // Define a altura da logo
-    cursor: "pointer", // Adiciona um cursor pointer para interatividade
+    height: "40px",
+    cursor: "pointer",
   },
   content: {
     flexGrow: 1,
@@ -94,6 +95,11 @@ const LoggedInLayout = ({ children }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [notification, setNotification] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   useEffect(() => {
     if (document.body.offsetWidth > 600) {
@@ -109,6 +115,24 @@ const LoggedInLayout = ({ children }) => {
   const handleCloseMenu = () => {
     setAnchorEl(null);
     setMenuOpen(false);
+  };
+
+  const handleLogout = () => {
+    setMenuOpen(false);
+    setNotification({
+      open: true,
+      message: "Logout realizado com sucesso!",
+      severity: "success",
+    });
+
+    setTimeout(() => {
+      history.push("/login");
+    }, 2000);
+  };
+
+  const handleCloseNotification = (event, reason) => {
+    if (reason === "clickaway") return;
+    setNotification({ ...notification, open: false });
   };
 
   return (
@@ -127,7 +151,7 @@ const LoggedInLayout = ({ children }) => {
             src={logo}
             alt="Logo"
             className={classes.logo}
-            onClick={() => history.push("/bem-vindo")} // Redireciona ao clicar na logo
+            onClick={() => history.push("/bem-vindo")}
           />
 
           <div>
@@ -160,13 +184,13 @@ const LoggedInLayout = ({ children }) => {
               onClose={handleCloseMenu}
             >
               <MenuItem
-                onClick={() => console.log("perfil")}
+                onClick={() => history.push("/perfil")}
                 style={{ backgroundColor: "white" }}
               >
                 Perfil
               </MenuItem>
               <MenuItem
-                onClick={() => console.log("logout")}
+                onClick={handleLogout}
                 style={{ backgroundColor: "white" }}
               >
                 Logout
@@ -215,6 +239,23 @@ const LoggedInLayout = ({ children }) => {
           </IconButton>
         </Toolbar>
       </AppBar>
+
+      {/* Notificação de Logout */}
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={4000}
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          elevation={6}
+          variant="filled"
+          onClose={handleCloseNotification}
+          severity={notification.severity}
+        >
+          {notification.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
