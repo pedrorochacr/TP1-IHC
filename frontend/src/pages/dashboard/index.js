@@ -12,22 +12,20 @@ import {
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min.js";
 import ReportIcon from "@material-ui/icons/Report";
-import EventIcon from "@material-ui/icons/Event";
-import BarChartIcon from "@material-ui/icons/BarChart";
+import { DateRangeOutlined, PlaceOutlined } from "@material-ui/icons";
 import evento1 from "../../assets/evento1.png";
 import evento2 from "../../assets/evento2.png";
-import { DateRangeOutlined, PlaceOutlined } from "@material-ui/icons";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-  
-    marginTop:100,
-    
+    marginTop: 100,
     backgroundColor: theme.palette.background.default,
   },
-  header: {
+  headerBar: {
+    // Caso precise de um header (bar) separado
     width: "100%",
     padding: theme.spacing(2),
     backgroundColor: theme.palette.primary.main,
@@ -42,8 +40,9 @@ const useStyles = makeStyles((theme) => ({
     gap: theme.spacing(3),
     width: "100%",
     maxWidth: 400,
+    marginBottom: theme.spacing(4),
   },
-  button: {
+  actionButton: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -60,34 +59,23 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     marginRight: theme.spacing(1),
   },
-
   paper: {
+    // Unificando estilos para o container que abriga as denúncias
     padding: theme.spacing(3),
     borderRadius: "12px",
     backgroundColor: "#fff",
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-  },
-  header: {
     textAlign: "center",
     fontWeight: 700,
-    marginBottom: theme.spacing(3),
-  },
-  button: {
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-    padding: theme.spacing(1),
-    fontWeight: "bold",
-    borderRadius: "8px",
+    // A margem inferior extra para afastar do final da tela
+    marginBottom: theme.spacing(8),
   },
   card: {
     display: "flex",
     borderRadius: "12px",
     boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
     marginBottom: theme.spacing(2),
-  },
-  cardMedia: {
-    width: 150,
-    borderRadius: "12px 0 0 12px",
+    textAlign: "left", // Para não herdar o 'center' da .paper
   },
   cardContent: {
     padding: theme.spacing(2),
@@ -97,16 +85,8 @@ const useStyles = makeStyles((theme) => ({
     padding: 0,
     marginTop: theme.spacing(2),
   },
-  dialogPaper: {
-    backgroundColor: "#fff",
-    borderRadius: "8px",
-    padding: theme.spacing(2),
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)",
-  },
-  backdrop: {
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
-  },
 }));
+
 const events = [
   {
     title: "Limpeza do Mar",
@@ -148,16 +128,10 @@ const reports = [
 const Dashboard = () => {
   const classes = useStyles();
   const history = useHistory();
-    const [visibleEvents, setVisibleEvents] = useState(1);
-    const [visibleReports, setVisibleReports] = useState(1);
-    const [logoutDialog, setLogoutDialog] = useState(false);
-    const [deleteDialog, setDeleteDialog] = useState(false);
-    const [cpf, setCpf] = useState("");
-    const [notification, setNotification] = useState({
-      open: false,
-      message: "",
-      severity: "success",
-    });
+
+  const [visibleEvents, setVisibleEvents] = useState(1);
+  const [visibleReports, setVisibleReports] = useState(1);
+
   const toggleEventsVisibility = () => {
     setVisibleEvents((prev) => (prev === 1 ? events.length : 1));
   };
@@ -165,23 +139,28 @@ const Dashboard = () => {
   const toggleReportsVisibility = () => {
     setVisibleReports((prev) => (prev === 1 ? reports.length : 1));
   };
+
   return (
     <div className={classes.root}>
-      
+      {/* Exemplo de um "header bar" caso queira usar */}
+      {/* <div className={classes.headerBar}>
+        <Typography variant="h5">Minha Dashboard</Typography>
+      </div> */}
+
       <div className={classes.buttonContainer}>
         <Button
           variant="contained"
           color="primary"
-          className={classes.button}
+          className={classes.actionButton}
           startIcon={<ReportIcon className={classes.icon} />}
           onClick={() => history.push("/denuncias")}
         >
           Fazer Denúncia
         </Button>
-
       </div>
+
       <Grid container direction="column" className={classes.paper}>
-        <Typography variant="h6" gutterBottom style={{ marginTop: 16 }}>
+        <Typography variant="h6" gutterBottom>
           Minhas denúncias:
         </Typography>
         {reports.slice(0, visibleReports).map((report, index) => (
