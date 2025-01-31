@@ -1,7 +1,16 @@
 import { useLocation } from "react-router-dom";
 import React, { useState, useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { makeStyles, AppBar, Toolbar, IconButton, Grid, Typography, MenuItem, Menu } from "@material-ui/core";
+import {
+  makeStyles,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Grid,
+  Typography,
+  MenuItem,
+  Menu,
+} from "@material-ui/core";
 import clsx from "clsx";
 import { AuthContext } from "../context/Auth/AuthContext";
 import HomeIcon from "@material-ui/icons/Home";
@@ -9,7 +18,9 @@ import LocationOnIcon from "@material-ui/icons/LocationOn";
 import DateRangeOutlined from "@material-ui/icons/DateRangeOutlined";
 import EqualizerOutlined from "@material-ui/icons/EqualizerOutlined";
 import PersonIcon from "@material-ui/icons/Person";
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import logo from "../assets/logo.png";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -32,12 +43,14 @@ const useStyles = makeStyles((theme) => ({
     }),
   },
   toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-    color: "white",
-   
     display: "flex",
-    justifyContent: "end",
-
+    justifyContent: "space-between", // Alinha logo e ícones nos extremos
+    paddingRight: 24,
+    color: "white",
+  },
+  logo: {
+    height: "40px", // Define a altura da logo
+    cursor: "pointer", // Adiciona um cursor pointer para interatividade
   },
   content: {
     flexGrow: 1,
@@ -60,17 +73,17 @@ const useStyles = makeStyles((theme) => ({
     color: `${theme.palette.secondary.main} !important`,
     backgroundColor: theme.palette.primary.dark,
     padding: theme.spacing(1),
-    borderRadius: '50%',
-    transform: 'scale(1.01)',
-    transition: 'all 1.5s ease',
-    '&:hover': {
-      transform: 'scale(1.01)'
-    }
+    borderRadius: "50%",
+    transform: "scale(1.01)",
+    transition: "all 1.5s ease",
+    "&:hover": {
+      transform: "scale(1.01)",
+    },
   },
   defaultIcon: {
     color: theme.palette.common.white,
-    transition: 'all 0.2s ease',
-  }
+    transition: "all 0.2s ease",
+  },
 }));
 
 const LoggedInLayout = ({ children }) => {
@@ -81,11 +94,13 @@ const LoggedInLayout = ({ children }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
+
   useEffect(() => {
     if (document.body.offsetWidth > 600) {
       setDrawerOpen(true);
     }
   }, []);
+
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
     setMenuOpen(true);
@@ -95,31 +110,39 @@ const LoggedInLayout = ({ children }) => {
     setAnchorEl(null);
     setMenuOpen(false);
   };
+
   return (
     <div className={classes.root}>
-      <AppBar 
-        position="absolute" 
-        className={clsx(classes.appBar, drawerOpen && classes.appBarShift)} 
+      <AppBar
+        position="absolute"
+        className={clsx(classes.appBar, drawerOpen && classes.appBarShift)}
         color="primary"
       >
-        <Toolbar 
-          variant="regular" 
+        <Toolbar
+          variant="regular"
           className={clsx(classes.toolbar, drawerOpen && classes.alignProfileIcon)}
         >
+          {/* Logo na barra superior */}
+          <img
+            src={logo}
+            alt="Logo"
+            className={classes.logo}
+            onClick={() => history.push("/bem-vindo")} // Redireciona ao clicar na logo
+          />
+
           <div>
             <Grid container alignItems="center">
-              <Typography style={{fontWeight:600, fontSize:20}}>Olá, Glivia</Typography>
-            <IconButton
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleMenu}
-              variant="contained"
-              style={{ color: "white" }}
-            >
-              <AccountCircleIcon />
-             
-            </IconButton>
+              <Typography style={{ fontWeight: 600, fontSize: 20 }}>Olá, Glivia</Typography>
+              <IconButton
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                variant="contained"
+                style={{ color: "white" }}
+              >
+                <AccountCircleIcon />
+              </IconButton>
             </Grid>
             <Menu
               id="menu-appbar"
@@ -136,14 +159,19 @@ const LoggedInLayout = ({ children }) => {
               open={menuOpen}
               onClose={handleCloseMenu}
             >
-              <MenuItem onClick={()=>console.log("perfil")} style={{backgroundColor: "white"}}>
+              <MenuItem
+                onClick={() => console.log("perfil")}
+                style={{ backgroundColor: "white" }}
+              >
                 Perfil
               </MenuItem>
-              <MenuItem onClick={()=>console.log("logout")} style={{backgroundColor: "white"}}>
-                 Logout
+              <MenuItem
+                onClick={() => console.log("logout")}
+                style={{ backgroundColor: "white" }}
+              >
+                Logout
               </MenuItem>
             </Menu>
-            
           </div>
         </Toolbar>
       </AppBar>

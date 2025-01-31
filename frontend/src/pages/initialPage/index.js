@@ -9,6 +9,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { Person, PersonAdd } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
+import logo from "./../../assets/logo1.png"; // Importando a imagem da logo
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,10 +27,19 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#fff",
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
   },
+  titleContainer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: theme.spacing(2),
+    gap: theme.spacing(1),
+  },
+  logo: {
+    height: "40px", // Altura da logo
+  },
   title: {
     fontWeight: 700,
     color: theme.palette.primary.main,
-    marginBottom: theme.spacing(2),
   },
   subtitle: {
     fontSize: "16px",
@@ -53,7 +63,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 const InitialPage = () => {
   const classes = useStyles();
   const history = useHistory();
@@ -63,9 +72,12 @@ const InitialPage = () => {
       <Container maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
-          <Typography variant="h4" className={classes.title}>
-            LixoSmart
-          </Typography>
+          <div className={classes.titleContainer}>
+            <img src={logo} alt="LixoSmart Logo" className={classes.logo} />
+            <Typography variant="h4" className={classes.title}>
+              LixoSmart
+            </Typography>
+          </div>
           <Typography variant="subtitle1" className={classes.subtitle}>
             "Transformando o descarte de resíduos em ações inteligentes para um
             planeta mais limpo"
