@@ -115,7 +115,7 @@ const Registration = () => {
               variant="outlined"
               margin="normal"
               fullWidth
-              label="Usuário/Organização"
+              label="Usuário"
               name="name"
               value={user.name}
               onChange={handleChangeInput}
