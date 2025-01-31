@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.default,
     minHeight: "100vh",
-    marginBottom: theme.spacing(5),
+    marginBottom: theme.spacing(2),
   },
   header: {
     textAlign: "center",
