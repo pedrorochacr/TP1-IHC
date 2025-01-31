@@ -20,6 +20,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    // Usando a cor de fundo padrão do tema (ou qualquer outra se desejar).
     backgroundColor: theme.palette.background.default,
     minHeight: "100vh",
     padding: theme.spacing(4, 0),
@@ -31,13 +32,22 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(4),
     color: theme.palette.primary.main,
   },
+  // Envolvemos a parte do FAQ em um "wrapper" branco
+  faqWrapper: {
+    backgroundColor: "#fff",
+    borderRadius: "12px",
+    padding: theme.spacing(3),
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(4),
+  },
   faqContainer: {
     maxWidth: "800px",
     margin: "auto",
   },
   botButton: {
     position: "fixed",
-    bottom: theme.spacing(4),
+    // Para subir mais o ícone do bot, aumente a distância do bottom
+    bottom: theme.spacing(8),
     right: theme.spacing(4),
     backgroundColor: theme.palette.primary.main,
     color: "#fff",
@@ -105,28 +115,33 @@ const HelpPage = () => {
           Central de Ajuda
         </Typography>
 
-        <div className={classes.faqContainer}>
-          <Accordion>
-            <AccordionSummary expandIcon={<ExpandMore />}>
-              <Typography variant="h6">Como denunciar um problema?</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>
-                Para denunciar um problema, vá até a aba "Denúncias" no menu inferior, clique em "Nova Denúncia" e siga as instruções.
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
+        {/* Container branco específico para o FAQ */}
+        <div className={classes.faqWrapper}>
+          <div className={classes.faqContainer}>
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMore />}>
+                <Typography variant="h6">Como denunciar um problema?</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>
+                  Para denunciar um problema, vá até a aba "Denúncias" no menu
+                  inferior, clique em "Nova Denúncia" e siga as instruções.
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
 
-          <Accordion>
-            <AccordionSummary expandIcon={<ExpandMore />}>
-              <Typography variant="h6">Como participar de eventos?</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>
-                Acesse a seção "Eventos", escolha um evento de sua preferência e clique em "Participar". Você receberá as informações por e-mail.
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMore />}>
+                <Typography variant="h6">Como participar de eventos?</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>
+                  Acesse a seção "Eventos", escolha um evento de sua preferência e
+                  clique em "Participar". Você receberá as informações por e-mail.
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+          </div>
         </div>
       </Container>
 
@@ -136,7 +151,11 @@ const HelpPage = () => {
       </IconButton>
 
       {/* Chat do Bot */}
-      <Dialog open={chatOpen} onClose={handleChatToggle} classes={{ paper: classes.chatDialog }}>
+      <Dialog
+        open={chatOpen}
+        onClose={handleChatToggle}
+        classes={{ paper: classes.chatDialog }}
+      >
         <DialogTitle>Bot de Ajuda</DialogTitle>
         <DialogContent className={classes.chatContainer}>
           {messages.map((msg, index) => (
